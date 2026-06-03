@@ -357,3 +357,17 @@ function Footer() {
     </footer>
   );
 }
+
+function ContactBox({ icon: Icon, label, value }: { icon: React.ComponentType<{ className?: string }>; label: string; value: string }) {
+  return (
+    <div className="flex items-center gap-4 rounded-xl border bg-card p-4 shadow-card">
+      <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+        <Icon className="h-5 w-5" />
+      </span>
+      <div className="text-left">
+        <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{label}</div>
+        <div className="text-sm font-semibold">{value}</div>
+      </div>
+    </div>
+  );
+}
