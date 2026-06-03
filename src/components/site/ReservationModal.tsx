@@ -36,7 +36,8 @@ export function ReservationModal({ open, onOpenChange }: Props) {
 
   const { data: settings } = useQuery({ queryKey: ["public-settings"], queryFn: getPublicSettings });
 
-  const [arrivalDate, setArrivalDate] = useState<Date | undefined>();
+  const today = useMemo(() => new Date(new Date().setHours(0, 0, 0, 0)), []);
+  const [arrivalDate, setArrivalDate] = useState<Date | undefined>(today);
   const [arrivalTime, setArrivalTime] = useState("08:00");
   const [departureDate, setDepartureDate] = useState<Date | undefined>();
   const [departureTime, setDepartureTime] = useState("20:00");
@@ -86,7 +87,7 @@ export function ReservationModal({ open, onOpenChange }: Props) {
       toast.success(`${t("form.success")} (~${price} ${settings?.currency ?? "BAM"})`);
       onOpenChange(false);
       setFullName(""); setPlate(""); setEmail(""); setPhone(""); setDestination(""); setNote("");
-      setArrivalDate(undefined); setDepartureDate(undefined);
+      setArrivalDate(today); setDepartureDate(undefined);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : t("form.error"));
     } finally { setSubmitting(false); }
@@ -101,15 +102,24 @@ export function ReservationModal({ open, onOpenChange }: Props) {
         </DialogHeader>
         <form onSubmit={submit} className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label={t("form.fullname")}><Input required value={fullName} onChange={(e) => setFullName(e.target.value)} /></Field>
-            <Field label={t("form.plate")}><Input required value={plate} onChange={(e) => setPlate(e.target.value)} placeholder="A12-B-345" /></Field>
-            <Field label={t("form.email")}><Input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} /></Field>
-            <Field label={t("form.phone")}><Input required value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+387 …" /></Field>
+            <Field label={t("form.fullname")} required><Input required value={fullName} onChange={(e) => setFullName(e.target.value)} /></Field>
+            <Field label={t("form.plate")} required>
+              <Input
+                required
+                value={plate}
+                onChange={(e) => setPlate(e.target.value.toUpperCase())}
+                placeholder="A12-B-345"
+                className="font-mono uppercase tracking-wider"
+                style={{ textTransform: "uppercase" }}
+              />
+            </Field>
+            <Field label={t("form.email")} required><Input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} /></Field>
+            <Field label={t("form.phone")} required><Input required value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+387 …" /></Field>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <DateTimeField label={t("form.arrival")} date={arrivalDate} setDate={(d) => { setArrivalDate(d); if (d && departureDate && departureDate < d) setDepartureDate(undefined); }} time={arrivalTime} setTime={setArrivalTime} />
-            <DateTimeField label={t("form.departure")} date={departureDate} setDate={setDepartureDate} time={departureTime} setTime={setDepartureTime} minDate={arrivalDate} />
+            <DateTimeField label={t("form.arrival")} required date={arrivalDate} setDate={(d) => { setArrivalDate(d); if (d && departureDate && departureDate < d) setDepartureDate(undefined); }} time={arrivalTime} setTime={setArrivalTime} />
+            <DateTimeField label={t("form.departure")} required date={departureDate} setDate={setDepartureDate} time={departureTime} setTime={setDepartureTime} minDate={arrivalDate} />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
@@ -148,25 +158,30 @@ export function ReservationModal({ open, onOpenChange }: Props) {
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return <div className="space-y-1.5"><Label>{label}</Label>{children}</div>;
+function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
+  return (
+    <div className="space-y-1.5">
+      <Label>{label} {required && <span className="text-destructive">*</span>}</Label>
+      {children}
+    </div>
+  );
 }
 
-function DateTimeField({ label, date, setDate, time, setTime, minDate }: { label: string; date?: Date; setDate: (d?: Date) => void; time: string; setTime: (v: string) => void; minDate?: Date }) {
+function DateTimeField({ label, required, date, setDate, time, setTime, minDate }: { label: string; required?: boolean; date?: Date; setDate: (d?: Date) => void; time: string; setTime: (v: string) => void; minDate?: Date }) {
   const today = new Date(new Date().setHours(0, 0, 0, 0));
   const floor = minDate && minDate > today ? new Date(new Date(minDate).setHours(0, 0, 0, 0)) : today;
   return (
     <div className="space-y-1.5">
-      <Label>{label}</Label>
+      <Label>{label} {required && <span className="text-destructive">*</span>}</Label>
       <div className="flex gap-2">
         <Popover>
           <PopoverTrigger asChild>
-            <Button type="button" variant="outline" className={cn("flex-1 justify-start text-left font-normal", !date && "text-muted-foreground")}>
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {date ? format(date, "dd.MM.yyyy") : "—"}
+            <Button type="button" variant="outline" className={cn("flex-1 justify-between text-left font-normal", !date && "text-muted-foreground")}>
+              <span>{date ? format(date, "dd.MM.yyyy") : "—"}</span>
+              <CalendarIcon className="ml-2 h-4 w-4 opacity-70" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
+          <PopoverContent className="w-auto p-0" align="end">
             <Calendar mode="single" selected={date} onSelect={setDate} initialFocus className={cn("p-3 pointer-events-auto")} disabled={(d) => d < floor} />
           </PopoverContent>
         </Popover>

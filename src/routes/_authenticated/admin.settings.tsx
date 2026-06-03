@@ -1,12 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Loader2, Plus, Trash2 } from "lucide-react";
+import { CalendarIcon, Loader2, Plus, Trash2 } from "lucide-react";
 import { addBlockedPeriod, getAdminSettings, removeBlockedPeriod, updateSettings } from "@/lib/reservations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { format } from "date-fns";
 
@@ -71,7 +75,13 @@ function SettingsPage() {
             </div>
             <div className="space-y-1.5">
               <Label>Valuta</Label>
-              <Input value={currency} onChange={(e) => setCurrency(e.target.value)} />
+              <Select value={currency} onValueChange={setCurrency}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="BAM">BAM</SelectItem>
+                  <SelectItem value="EUR">EUR</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
           <Button onClick={() => saveMut.mutate()} disabled={saveMut.isPending} className="bg-primary text-primary-foreground hover:bg-primary-hover">
@@ -87,8 +97,8 @@ function SettingsPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-3 sm:grid-cols-3">
-            <div className="space-y-1.5"><Label>Od</Label><Input type="date" value={bStart} onChange={(e) => setBStart(e.target.value)} /></div>
-            <div className="space-y-1.5"><Label>Do</Label><Input type="date" value={bEnd} onChange={(e) => setBEnd(e.target.value)} /></div>
+            <DateInput label="Od" value={bStart} onChange={setBStart} />
+            <DateInput label="Do" value={bEnd} onChange={setBEnd} min={bStart} />
             <div className="space-y-1.5"><Label>Razlog</Label><Input value={bReason} onChange={(e) => setBReason(e.target.value)} placeholder="Praznik…" /></div>
           </div>
           <Button onClick={() => addBlockMut.mutate()} disabled={!bStart || !bEnd || addBlockMut.isPending} variant="outline">
@@ -109,6 +119,34 @@ function SettingsPage() {
           </div>
         </CardContent>
       </Card>
+    </div>
+  );
+}
+
+function DateInput({ label, value, onChange, min }: { label: string; value: string; onChange: (v: string) => void; min?: string }) {
+  const date = value ? new Date(value) : undefined;
+  const minDate = min ? new Date(min) : undefined;
+  return (
+    <div className="space-y-1.5">
+      <Label>{label}</Label>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button type="button" variant="outline" className={cn("w-full justify-between text-left font-normal", !date && "text-muted-foreground")}>
+            <span>{date ? format(date, "dd.MM.yyyy") : "—"}</span>
+            <CalendarIcon className="ml-2 h-4 w-4 opacity-70" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0" align="end">
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={(d) => onChange(d ? format(d, "yyyy-MM-dd") : "")}
+            initialFocus
+            className={cn("p-3 pointer-events-auto")}
+            disabled={minDate ? (d) => d < minDate : undefined}
+          />
+        </PopoverContent>
+      </Popover>
     </div>
   );
 }
