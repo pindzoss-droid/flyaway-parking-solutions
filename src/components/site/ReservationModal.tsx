@@ -152,7 +152,9 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   return <div className="space-y-1.5"><Label>{label}</Label>{children}</div>;
 }
 
-function DateTimeField({ label, date, setDate, time, setTime }: { label: string; date?: Date; setDate: (d?: Date) => void; time: string; setTime: (v: string) => void }) {
+function DateTimeField({ label, date, setDate, time, setTime, minDate }: { label: string; date?: Date; setDate: (d?: Date) => void; time: string; setTime: (v: string) => void; minDate?: Date }) {
+  const today = new Date(new Date().setHours(0, 0, 0, 0));
+  const floor = minDate && minDate > today ? new Date(new Date(minDate).setHours(0, 0, 0, 0)) : today;
   return (
     <div className="space-y-1.5">
       <Label>{label}</Label>
@@ -165,7 +167,7 @@ function DateTimeField({ label, date, setDate, time, setTime }: { label: string;
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
-            <Calendar mode="single" selected={date} onSelect={setDate} initialFocus className={cn("p-3 pointer-events-auto")} disabled={(d) => d < new Date(new Date().setHours(0,0,0,0))} />
+            <Calendar mode="single" selected={date} onSelect={setDate} initialFocus className={cn("p-3 pointer-events-auto")} disabled={(d) => d < floor} />
           </PopoverContent>
         </Popover>
         <Input type="time" value={time} onChange={(e) => setTime(e.target.value)} className="w-28" />
