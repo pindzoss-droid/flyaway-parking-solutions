@@ -173,7 +173,7 @@ function Field({ label, required, children }: { label: string; required?: boolea
 function DateTimeField({ label, required, date, setDate, time, setTime, minDate }: { label: string; required?: boolean; date?: Date; setDate: (d?: Date) => void; time: string; setTime: (v: string) => void; minDate?: Date }) {
   const today = new Date(new Date().setHours(0, 0, 0, 0));
   const floor = minDate && minDate > today ? new Date(new Date(minDate).setHours(0, 0, 0, 0)) : today;
-  const timeInputRef = React.useRef<HTMLInputElement>(null);
+  const timeInputRef = useRef<HTMLInputElement>(null);
   return (
     <div className="space-y-1.5">
       <Label>{label} {required && <span className="text-destructive">*</span>}</Label>
