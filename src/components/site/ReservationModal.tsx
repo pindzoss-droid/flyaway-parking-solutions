@@ -118,8 +118,8 @@ export function ReservationModal({ open, onOpenChange }: Props) {
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <DateTimeField label={t("form.arrival")} required date={arrivalDate} setDate={(d) => { setArrivalDate(d); if (d && departureDate && departureDate < d) setDepartureDate(undefined); }} time={arrivalTime} setTime={setArrivalTime} />
-            <DateTimeField label={t("form.departure")} required date={departureDate} setDate={setDepartureDate} time={departureTime} setTime={setDepartureTime} minDate={arrivalDate} />
+            <DateTimeField dateLabel={t("form.arrivalDate")} timeLabel={t("form.arrivalTime")} required date={arrivalDate} setDate={(d) => { setArrivalDate(d); if (d && departureDate && departureDate < d) setDepartureDate(undefined); }} time={arrivalTime} setTime={setArrivalTime} />
+            <DateTimeField dateLabel={t("form.departureDate")} timeLabel={t("form.departureTime")} required date={departureDate} setDate={setDepartureDate} time={departureTime} setTime={setDepartureTime} minDate={arrivalDate} />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
