@@ -108,8 +108,8 @@ export function ReservationModal({ open, onOpenChange }: Props) {
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <DateTimeField label={t("form.arrival")} date={arrivalDate} setDate={setArrivalDate} time={arrivalTime} setTime={setArrivalTime} />
-            <DateTimeField label={t("form.departure")} date={departureDate} setDate={setDepartureDate} time={departureTime} setTime={setDepartureTime} />
+            <DateTimeField label={t("form.arrival")} date={arrivalDate} setDate={(d) => { setArrivalDate(d); if (d && departureDate && departureDate < d) setDepartureDate(undefined); }} time={arrivalTime} setTime={setArrivalTime} />
+            <DateTimeField label={t("form.departure")} date={departureDate} setDate={setDepartureDate} time={departureTime} setTime={setDepartureTime} minDate={arrivalDate} />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
@@ -126,7 +126,7 @@ export function ReservationModal({ open, onOpenChange }: Props) {
             {checking && (<span className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" />{t("form.checking")}</span>)}
             {!checking && availability && availability.blocked && (<span className="flex items-center gap-2 text-destructive"><XCircle className="h-4 w-4" />{t("form.blocked")}</span>)}
             {!checking && availability && !availability.blocked && availability.ok && (
-              <span className="flex items-center gap-2 text-success"><CheckCircle2 className="h-4 w-4" />{t("form.available")} ({availability.available}/{availability.total})</span>
+              <span className="flex items-center gap-2 text-success"><CheckCircle2 className="h-4 w-4" />{t("form.available")}</span>
             )}
             {!checking && availability && !availability.blocked && !availability.ok && (
               <span className="flex items-center gap-2 text-destructive"><XCircle className="h-4 w-4" />{t("form.unavailable")}</span>
