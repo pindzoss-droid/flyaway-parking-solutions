@@ -106,11 +106,6 @@ function Why() {
 
 function DroneShowcase() {
   const { t } = useI18n();
-  const points = [
-    { icon: MapPin, label: t("drone.p1") },
-    { icon: Shield, label: t("drone.p2") },
-    { icon: ShieldCheck, label: t("drone.p3") },
-  ];
   return (
     <section className="bg-muted/40 py-24">
       <div className="container-park grid items-center gap-16 lg:grid-cols-[65fr_35fr]">
@@ -120,14 +115,6 @@ function DroneShowcase() {
         <div className="order-1 text-center lg:order-2 lg:text-left">
           <h2 className="text-3xl font-bold sm:text-4xl">{t("drone.title")}</h2>
           <p className="mt-4 text-muted-foreground">{t("drone.desc")}</p>
-          <ul className="mt-6 space-y-3 text-left">
-            {points.map((p) => (
-              <li key={p.label} className="flex items-start gap-3 rounded-xl border bg-card/60 p-3">
-                <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary"><p.icon className="h-4 w-4" /></span>
-                <span className="text-sm font-medium">{p.label}</span>
-              </li>
-            ))}
-          </ul>
           <div className="mt-6 grid grid-cols-3 gap-3 text-center">
             <div className="rounded-xl border bg-card p-3"><div className="text-2xl font-extrabold text-primary">2 min</div><div className="text-xs text-muted-foreground">do terminala</div></div>
             <div className="rounded-xl border bg-card p-3"><div className="text-2xl font-extrabold text-primary">24/7</div><div className="text-xs text-muted-foreground">nadzor</div></div>
