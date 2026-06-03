@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { format } from "date-fns";
-import { CalendarIcon, Clock, Loader2, CheckCircle2, XCircle } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { format, parse } from "date-fns";
+import { CalendarIcon, Loader2, CheckCircle2, XCircle } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { checkAvailability, createReservation, getPublicSettings } from "@/lib/reservations";
 import { useQuery } from "@tanstack/react-query";
@@ -170,40 +171,62 @@ function Field({ label, required, children }: { label: string; required?: boolea
   );
 }
 
+const HOURS = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, "0"));
+const MINUTES = Array.from({ length: 12 }, (_, i) => (i * 5).toString().padStart(2, "0"));
+
 function DateTimeField({ label, required, date, setDate, time, setTime, minDate }: { label: string; required?: boolean; date?: Date; setDate: (d?: Date) => void; time: string; setTime: (v: string) => void; minDate?: Date }) {
   const today = new Date(new Date().setHours(0, 0, 0, 0));
   const floor = minDate && minDate > today ? new Date(new Date(minDate).setHours(0, 0, 0, 0)) : today;
-  const timeInputRef = useRef<HTMLInputElement>(null);
+  const minStr = format(floor, "yyyy-MM-dd");
+  const dateStr = date ? format(date, "yyyy-MM-dd") : "";
+  const [hh = "08", mm = "00"] = time.split(":");
+
   return (
     <div className="space-y-1.5">
       <Label>{label} {required && <span className="text-destructive">*</span>}</Label>
-      <div className="flex gap-2">
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button type="button" variant="outline" className={cn("flex-1 justify-between text-left font-normal", !date && "text-muted-foreground")}>
-              <span>{date ? format(date, "dd.MM.yyyy") : "—"}</span>
-              <CalendarIcon className="ml-2 h-4 w-4 opacity-70" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="end">
-            <Calendar mode="single" selected={date} onSelect={setDate} initialFocus className={cn("p-3 pointer-events-auto")} disabled={(d) => d < floor} />
-          </PopoverContent>
-        </Popover>
-        <div className="relative w-32">
+      <div className="space-y-2">
+        <div className="relative">
           <input
-            ref={timeInputRef}
-            type="time"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-            onClick={() => {
-              const el = timeInputRef.current;
-              if (el && typeof el.showPicker === "function") {
-                try { el.showPicker(); } catch { /* ignore */ }
-              }
+            type="date"
+            value={dateStr}
+            min={minStr}
+            onChange={(e) => {
+              const v = e.target.value;
+              if (!v) { setDate(undefined); return; }
+              const parsed = parse(v, "yyyy-MM-dd", new Date());
+              if (!isNaN(parsed.getTime()) && parsed >= floor) setDate(parsed);
             }}
-            className="flex h-10 w-full cursor-pointer rounded-md border border-input bg-background px-3 py-2 pr-9 text-sm ring-offset-background hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 pr-9 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
           />
-          <Clock className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 opacity-70" />
+          <Popover>
+            <PopoverTrigger asChild>
+              <button
+                type="button"
+                aria-label="Otvori kalendar"
+                className="absolute right-1 top-1/2 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+              >
+                <CalendarIcon className="h-4 w-4" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="end">
+              <Calendar mode="single" selected={date} onSelect={setDate} initialFocus className={cn("p-3 pointer-events-auto")} disabled={(d) => d < floor} />
+            </PopoverContent>
+          </Popover>
+        </div>
+        <div className="flex items-center gap-2">
+          <Select value={hh} onValueChange={(v) => setTime(`${v}:${mm}`)}>
+            <SelectTrigger className="flex-1"><SelectValue /></SelectTrigger>
+            <SelectContent className="max-h-60">
+              {HOURS.map((h) => <SelectItem key={h} value={h}>{h}</SelectItem>)}
+            </SelectContent>
+          </Select>
+          <span className="text-muted-foreground">:</span>
+          <Select value={MINUTES.includes(mm) ? mm : "00"} onValueChange={(v) => setTime(`${hh}:${v}`)}>
+            <SelectTrigger className="flex-1"><SelectValue /></SelectTrigger>
+            <SelectContent className="max-h-60">
+              {MINUTES.map((m) => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+            </SelectContent>
+          </Select>
         </div>
       </div>
     </div>
