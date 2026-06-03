@@ -82,9 +82,9 @@ function Why() {
     { icon: Car, t: t("why.rentcar.t"), d: t("why.rentcar.d") },
   ];
   return (
-    <section id="why" className="bg-background py-24">
+    <section id="why" className="bg-background py-28">
       <div className="container-park text-center">
-        <div className="mx-auto mb-14 max-w-2xl">
+        <div className="mx-auto mb-16 max-w-2xl">
           <h2 className="text-3xl font-bold sm:text-4xl">{t("why.title")}</h2>
           <p className="mt-4 text-muted-foreground">{t("why.subtitle")}</p>
         </div>
