@@ -173,6 +173,7 @@ function Field({ label, required, children }: { label: string; required?: boolea
 function DateTimeField({ label, required, date, setDate, time, setTime, minDate }: { label: string; required?: boolean; date?: Date; setDate: (d?: Date) => void; time: string; setTime: (v: string) => void; minDate?: Date }) {
   const today = new Date(new Date().setHours(0, 0, 0, 0));
   const floor = minDate && minDate > today ? new Date(new Date(minDate).setHours(0, 0, 0, 0)) : today;
+  const timeInputRef = React.useRef<HTMLInputElement>(null);
   return (
     <div className="space-y-1.5">
       <Label>{label} {required && <span className="text-destructive">*</span>}</Label>
@@ -188,7 +189,31 @@ function DateTimeField({ label, required, date, setDate, time, setTime, minDate 
             <Calendar mode="single" selected={date} onSelect={setDate} initialFocus className={cn("p-3 pointer-events-auto")} disabled={(d) => d < floor} />
           </PopoverContent>
         </Popover>
-        <Input type="time" value={time} onChange={(e) => setTime(e.target.value)} className="w-28" />
+        <div className="relative w-32">
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full justify-between text-left font-normal"
+            onClick={() => {
+              const el = timeInputRef.current;
+              if (!el) return;
+              if (typeof el.showPicker === "function") el.showPicker();
+              else el.focus();
+            }}
+          >
+            <span>{time || "—"}</span>
+            <Clock className="ml-2 h-4 w-4 opacity-70" />
+          </Button>
+          <input
+            ref={timeInputRef}
+            type="time"
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
+            className="pointer-events-none absolute inset-0 h-full w-full opacity-0"
+            tabIndex={-1}
+            aria-hidden
+          />
+        </div>
       </div>
     </div>
   );
