@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet, Link, useRouterState, useNavigate } from "@tanstack/react-router";
-import { CalendarDays, Settings as SettingsIcon, LogOut, Home } from "lucide-react";
+import { CalendarDays, Settings as SettingsIcon, LogOut, Home, LayoutDashboard } from "lucide-react";
 import { SidebarProvider, Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarTrigger, SidebarFooter } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,6 +11,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 });
 
 const items = [
+  { url: "/admin", title: "Pregled", icon: LayoutDashboard, exact: true },
   { url: "/admin/reservations", title: "Rezervacije", icon: CalendarDays },
   { url: "/admin/settings", title: "Postavke", icon: SettingsIcon },
 ];
