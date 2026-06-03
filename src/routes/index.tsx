@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import type * as React from "react";
 import { useState } from "react";
 import { Shield, Plane, Bus, Car, MapPin, Phone, Mail, Star, PlayCircle, Clock, CreditCard, ShieldCheck } from "lucide-react";
 import { Navbar } from "@/components/site/Navbar";
