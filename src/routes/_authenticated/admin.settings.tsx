@@ -75,7 +75,13 @@ function SettingsPage() {
             </div>
             <div className="space-y-1.5">
               <Label>Valuta</Label>
-              <Input value={currency} onChange={(e) => setCurrency(e.target.value)} />
+              <Select value={currency} onValueChange={setCurrency}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="BAM">BAM</SelectItem>
+                  <SelectItem value="EUR">EUR</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
           <Button onClick={() => saveMut.mutate()} disabled={saveMut.isPending} className="bg-primary text-primary-foreground hover:bg-primary-hover">
@@ -91,8 +97,8 @@ function SettingsPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-3 sm:grid-cols-3">
-            <div className="space-y-1.5"><Label>Od</Label><Input type="date" value={bStart} onChange={(e) => setBStart(e.target.value)} /></div>
-            <div className="space-y-1.5"><Label>Do</Label><Input type="date" value={bEnd} onChange={(e) => setBEnd(e.target.value)} /></div>
+            <DateInput label="Od" value={bStart} onChange={setBStart} />
+            <DateInput label="Do" value={bEnd} onChange={setBEnd} min={bStart} />
             <div className="space-y-1.5"><Label>Razlog</Label><Input value={bReason} onChange={(e) => setBReason(e.target.value)} placeholder="Praznik…" /></div>
           </div>
           <Button onClick={() => addBlockMut.mutate()} disabled={!bStart || !bEnd || addBlockMut.isPending} variant="outline">
