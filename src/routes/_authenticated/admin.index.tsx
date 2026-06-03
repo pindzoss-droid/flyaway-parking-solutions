@@ -76,15 +76,15 @@ function AdminHome() {
               <AreaChart data={stats.dailySeries} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="rezGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.4} />
-                    <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                    <stop offset="0%" stopColor="var(--primary)" stopOpacity={0.4} />
+                    <stop offset="100%" stopColor="var(--primary)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                <XAxis dataKey="label" tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
-                <YAxis allowDecimals={false} tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
-                <Tooltip contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }} />
-                <Area type="monotone" dataKey="count" stroke="hsl(var(--primary))" strokeWidth={2} fill="url(#rezGrad)" />
+                <XAxis dataKey="label" tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" />
+                <YAxis allowDecimals={false} tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" />
+                <Tooltip contentStyle={{ background: "var(--popover)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 }} />
+                <Area type="monotone" dataKey="count" stroke="var(--primary)" strokeWidth={2} fill="url(#rezGrad)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -99,9 +99,9 @@ function AdminHome() {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={stats.statusSeries} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                <XAxis dataKey="label" tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
-                <YAxis allowDecimals={false} tick={{ fontSize: 11 }} stroke="hsl(var(--muted-foreground))" />
-                <Tooltip contentStyle={{ background: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }} />
+                <XAxis dataKey="label" tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" />
+                <YAxis allowDecimals={false} tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" />
+                <Tooltip contentStyle={{ background: "var(--popover)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 }} />
                 <Bar dataKey="count" radius={[6, 6, 0, 0]}>
                   {stats.statusSeries.map((s, i) => <Cell key={i} fill={s.color} />)}
                 </Bar>
@@ -225,9 +225,9 @@ function computeStats(reservations: Reservation[], totalSpots: number) {
   });
 
   const statusSeries = [
-    { label: "Aktivne", count: activeCount, color: "hsl(var(--success))" },
-    { label: "Otkazane", count: cancelledCount, color: "hsl(var(--muted-foreground))" },
-    { label: "No-show", count: noShowCount, color: "hsl(var(--destructive))" },
+    { label: "Aktivne", count: activeCount, color: "var(--success)" },
+    { label: "Otkazane", count: cancelledCount, color: "var(--muted-foreground)" },
+    { label: "No-show", count: noShowCount, color: "var(--destructive)" },
   ];
 
   upcoming.sort((a, b) => new Date(a.arrival_at).getTime() - new Date(b.arrival_at).getTime());
