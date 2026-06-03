@@ -171,8 +171,8 @@ function Faq() {
         <Accordion type="single" collapsible className="mt-8 text-left">
           {qs.map((q, i) => (
             <AccordionItem key={i} value={`item-${i}`}>
-              <AccordionTrigger className="text-left">{q.q}</AccordionTrigger>
-              <AccordionContent>{q.a}</AccordionContent>
+              <AccordionTrigger className="text-left text-lg font-bold sm:text-xl">{q.q}</AccordionTrigger>
+              <AccordionContent className="text-base text-muted-foreground">{q.a}</AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
@@ -189,10 +189,10 @@ function Location() {
         <div className="text-center lg:text-left">
           <h2 className="text-4xl font-bold sm:text-5xl">{t("location.title")}</h2>
           <p className="mt-4 text-muted-foreground">{t("location.desc")}</p>
-          <div className="mt-6 inline-flex flex-col gap-2 text-sm">
-            <p className="flex items-center gap-2"><MapPin className="h-4 w-4 text-primary" /> Aerodromska bb, Sarajevo</p>
-            <p className="flex items-center gap-2"><Phone className="h-4 w-4 text-primary" /> +387 — — — —</p>
-            <p className="flex items-center gap-2"><Mail className="h-4 w-4 text-primary" /> info@parkandfly.ba</p>
+          <div className="mt-8 grid gap-3">
+            <ContactBox icon={MapPin} label="Adresa" value="Aerodromska bb, Sarajevo" />
+            <ContactBox icon={Phone} label="Telefon" value="+387 — — — —" />
+            <ContactBox icon={Mail} label="Email" value="info@parkandfly.ba" />
           </div>
         </div>
         <div className="aspect-video overflow-hidden rounded-2xl border bg-card shadow-card">
