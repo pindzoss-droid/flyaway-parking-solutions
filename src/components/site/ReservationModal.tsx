@@ -123,30 +123,34 @@ export function ReservationModal({ open, onOpenChange }: Props) {
 
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label={t("form.destination")}><Input value={destination} onChange={(e) => setDestination(e.target.value)} placeholder="Istanbul, Vienna…" /></Field>
-            <div className="flex items-center justify-between rounded-md border px-3 py-2">
-              <Label htmlFor="transfer">{t("form.transfer")}</Label>
-              <Switch id="transfer" checked={transfer} onCheckedChange={setTransfer} />
-            </div>
+            <Field label={t("form.transfer")}>
+              <div className="flex h-9 items-center justify-between rounded-md border bg-transparent px-3 shadow-sm">
+                <span className="text-sm text-muted-foreground">{transfer ? "Da" : "Ne"}</span>
+                <Switch id="transfer" checked={transfer} onCheckedChange={setTransfer} />
+              </div>
+            </Field>
           </div>
 
           <Field label={t("form.note")}><Textarea rows={2} value={note} onChange={(e) => setNote(e.target.value)} /></Field>
 
-          <div className="rounded-lg border bg-muted/40 p-3 text-sm">
-            {checking && (<span className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" />{t("form.checking")}</span>)}
-            {!checking && availability && availability.blocked && (<span className="flex items-center gap-2 text-destructive"><XCircle className="h-4 w-4" />{t("form.blocked")}</span>)}
-            {!checking && availability && !availability.blocked && availability.ok && (
-              <span className="flex items-center gap-2 text-success"><CheckCircle2 className="h-4 w-4" />{t("form.available")}</span>
-            )}
-            {!checking && availability && !availability.blocked && !availability.ok && (
-              <span className="flex items-center gap-2 text-destructive"><XCircle className="h-4 w-4" />{t("form.unavailable")}</span>
-            )}
-            {arrivalISO && departureISO && settings && (
-              <div className="mt-2 flex items-center justify-between border-t pt-2">
-                <span className="text-muted-foreground">{t("form.estimate")} · {days} {t("form.days")}</span>
-                <span className="text-lg font-bold text-primary">{price} {settings.currency}</span>
-              </div>
-            )}
-          </div>
+          {(checking || availability) && (
+            <div className="rounded-lg border bg-muted/40 p-3 text-sm">
+              {checking && (<span className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" />{t("form.checking")}</span>)}
+              {!checking && availability && availability.blocked && (<span className="flex items-center gap-2 text-destructive"><XCircle className="h-4 w-4" />{t("form.blocked")}</span>)}
+              {!checking && availability && !availability.blocked && availability.ok && (
+                <span className="flex items-center gap-2 text-success"><CheckCircle2 className="h-4 w-4" />{t("form.available")}</span>
+              )}
+              {!checking && availability && !availability.blocked && !availability.ok && (
+                <span className="flex items-center gap-2 text-destructive"><XCircle className="h-4 w-4" />{t("form.unavailable")}</span>
+              )}
+              {!checking && availability?.ok && arrivalISO && departureISO && settings && (
+                <div className="mt-2 flex items-center justify-between border-t pt-2">
+                  <span className="text-muted-foreground">{t("form.estimate")} · {days} {t("form.days")}</span>
+                  <span className="text-lg font-bold text-primary">{price} {settings.currency}</span>
+                </div>
+              )}
+            </div>
+          )}
 
           <Button type="submit" disabled={submitting || !availability?.ok} className="w-full bg-primary text-primary-foreground hover:bg-primary-hover">
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : t("form.submit")}
