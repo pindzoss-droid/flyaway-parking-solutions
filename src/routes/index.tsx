@@ -49,18 +49,21 @@ function Hero({ onBook }: { onBook: () => void }) {
       style={{ backgroundImage: `linear-gradient(135deg, oklch(0.18 0.04 252 / 0.88), oklch(0.22 0.07 240 / 0.78)), url(${droneImg})`, backgroundSize: "cover", backgroundPosition: "center" }}
     >
       <div className="container-park flex min-h-[88vh] flex-col items-center justify-center py-24 text-center text-navy-foreground">
-        <span className="mb-5 inline-flex items-center rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs font-medium tracking-wide text-navy-foreground/90">
+        <span className="mb-8 inline-flex items-center rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs font-medium tracking-wide text-navy-foreground/90">
           {t("hero.badge")}
         </span>
-        <h1 className="max-w-4xl text-5xl font-bold leading-[1.05] sm:text-6xl md:text-7xl">
+        <h1 className="max-w-5xl text-6xl font-extrabold leading-[1.02] sm:text-7xl md:text-8xl">
           {t("hero.title")}
         </h1>
-        <p className="mx-auto mt-6 max-w-2xl text-lg text-navy-foreground/85 sm:text-xl">{t("hero.desc")}</p>
-        <div className="mt-9 flex flex-wrap justify-center gap-3">
-          <Button onClick={onBook} size="lg" className="bg-primary text-primary-foreground hover:bg-primary-hover shadow-cta">
+        <p className="mt-5 max-w-3xl text-2xl font-semibold text-navy-foreground/95 sm:text-3xl">
+          {t("hero.subtitle")}
+        </p>
+        <p className="mx-auto mt-8 max-w-2xl text-lg text-navy-foreground/80 sm:text-xl">{t("hero.desc")}</p>
+        <div className="mt-12 flex flex-wrap justify-center gap-4">
+          <Button onClick={onBook} size="lg" className="bg-primary text-primary-foreground hover:bg-primary-hover shadow-cta h-14 px-10 text-base font-bold tracking-wide">
             {t("hero.cta")}
           </Button>
-          <a href="#why" className="inline-flex items-center justify-center rounded-md border border-white/25 px-5 py-2.5 text-sm font-medium text-navy-foreground hover:bg-white/10">
+          <a href="#why" className="inline-flex h-14 items-center justify-center rounded-md border border-white/25 px-7 text-base font-semibold text-navy-foreground hover:bg-white/10">
             {t("nav.why")}
           </a>
         </div>
@@ -102,6 +105,11 @@ function Why() {
 
 function DroneShowcase() {
   const { t } = useI18n();
+  const points = [
+    { icon: Plane, label: "Direktan vizuelni pristup pisti aerodroma" },
+    { icon: ShieldCheck, label: "Ograđen prostor pod kontrolom 24/7" },
+    { icon: Bus, label: "Shuttle vozilo uvijek na lokaciji" },
+  ];
   return (
     <section className="bg-muted/40 py-24">
       <div className="container-park grid items-center gap-10 lg:grid-cols-[65fr_35fr]">
@@ -111,6 +119,19 @@ function DroneShowcase() {
         <div className="order-1 text-center lg:order-2 lg:text-left">
           <h2 className="text-4xl font-bold sm:text-5xl">{t("drone.title")}</h2>
           <p className="mt-4 text-muted-foreground">{t("drone.desc")}</p>
+          <ul className="mt-6 space-y-3 text-left">
+            {points.map((p) => (
+              <li key={p.label} className="flex items-start gap-3 rounded-xl border bg-card/60 p-3">
+                <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary"><p.icon className="h-4 w-4" /></span>
+                <span className="text-sm font-medium">{p.label}</span>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-6 grid grid-cols-3 gap-3 text-center">
+            <div className="rounded-xl border bg-card p-3"><div className="text-2xl font-extrabold text-primary">2 min</div><div className="text-xs text-muted-foreground">do terminala</div></div>
+            <div className="rounded-xl border bg-card p-3"><div className="text-2xl font-extrabold text-primary">24/7</div><div className="text-xs text-muted-foreground">nadzor</div></div>
+            <div className="rounded-xl border bg-card p-3"><div className="text-2xl font-extrabold text-primary">100%</div><div className="text-xs text-muted-foreground">ograđeno</div></div>
+          </div>
         </div>
       </div>
     </section>
