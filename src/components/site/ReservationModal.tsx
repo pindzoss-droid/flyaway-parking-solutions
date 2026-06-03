@@ -174,7 +174,7 @@ function Field({ label, required, children }: { label: string; required?: boolea
 const HOURS = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, "0"));
 const MINUTES = Array.from({ length: 12 }, (_, i) => (i * 5).toString().padStart(2, "0"));
 
-function DateTimeField({ label, required, date, setDate, time, setTime, minDate }: { label: string; required?: boolean; date?: Date; setDate: (d?: Date) => void; time: string; setTime: (v: string) => void; minDate?: Date }) {
+function DateTimeField({ dateLabel, timeLabel, required, date, setDate, time, setTime, minDate }: { dateLabel: string; timeLabel: string; required?: boolean; date?: Date; setDate: (d?: Date) => void; time: string; setTime: (v: string) => void; minDate?: Date }) {
   const today = new Date(new Date().setHours(0, 0, 0, 0));
   const floor = minDate && minDate > today ? new Date(new Date(minDate).setHours(0, 0, 0, 0)) : today;
   const minStr = format(floor, "yyyy-MM-dd");
@@ -183,8 +183,8 @@ function DateTimeField({ label, required, date, setDate, time, setTime, minDate 
 
   return (
     <div className="space-y-1.5">
-      <Label>{label} {required && <span className="text-destructive">*</span>}</Label>
       <div className="space-y-2">
+        <Label>{dateLabel} {required && <span className="text-destructive">*</span>}</Label>
         <div className="relative">
           <input
             type="date"
@@ -213,6 +213,7 @@ function DateTimeField({ label, required, date, setDate, time, setTime, minDate 
             </PopoverContent>
           </Popover>
         </div>
+        <Label>{timeLabel}</Label>
         <div className="flex items-center gap-2">
           <Select value={hh} onValueChange={(v) => setTime(`${v}:${mm}`)}>
             <SelectTrigger className="flex-1"><SelectValue /></SelectTrigger>
