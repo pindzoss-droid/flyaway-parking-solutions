@@ -97,8 +97,7 @@ export function ReservationModal({ open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{t("form.title")}</DialogTitle>
-          <DialogDescription>Park&Fly — Sarajevo</DialogDescription>
+          <DialogTitle className="text-2xl font-bold sm:text-3xl">{t("form.title")}</DialogTitle>
         </DialogHeader>
         <form onSubmit={submit} className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
