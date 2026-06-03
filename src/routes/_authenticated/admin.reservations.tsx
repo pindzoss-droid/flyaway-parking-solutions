@@ -1,10 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { format } from "date-fns";
 import { Loader2, Plus, MoreHorizontal } from "lucide-react";
-import { listReservations, updateReservationStatus, adminCreateReservation, checkAvailability } from "@/lib/reservations.functions";
+import { listReservations, updateReservationStatus, adminCreateReservation, checkAvailability, type Reservation } from "@/lib/reservations";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -20,12 +19,6 @@ export const Route = createFileRoute("/_authenticated/admin/reservations")({
   component: ReservationsPage,
 });
 
-type Reservation = {
-  id: number; full_name: string; vehicle_plate: string; contact_email: string; contact_phone: string;
-  arrival_at: string; departure_at: string; destination: string | null; status: "active" | "cancelled" | "no_show";
-  estimated_price: number; note: string | null; source: string; needs_airport_transfer: boolean;
-};
-
 function StatusBadge({ status }: { status: string }) {
   const map: Record<string, string> = {
     active: "bg-success/15 text-success border-success/30",
@@ -37,15 +30,13 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 function ReservationsPage() {
-  const listFn = useServerFn(listReservations);
-  const updateFn = useServerFn(updateReservationStatus);
   const qc = useQueryClient();
   const [addOpen, setAddOpen] = useState(false);
 
-  const { data, isLoading } = useQuery({ queryKey: ["admin-reservations"], queryFn: () => listFn() });
+  const { data, isLoading } = useQuery({ queryKey: ["admin-reservations"], queryFn: listReservations });
 
   const updateMut = useMutation({
-    mutationFn: (vars: { id: number; status: "active" | "cancelled" | "no_show" }) => updateFn({ data: vars }),
+    mutationFn: (vars: { id: number; status: Reservation["status"] }) => updateReservationStatus(vars.id, vars.status),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["admin-reservations"] }); toast.success("Status ažuriran"); },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Greška"),
   });
@@ -83,7 +74,7 @@ function ReservationsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {(data as Reservation[] | undefined)?.map((r) => (
+                {data?.map((r) => (
                   <TableRow key={r.id}>
                     <TableCell className="font-mono text-xs">#{r.id}</TableCell>
                     <TableCell>
@@ -111,7 +102,7 @@ function ReservationsPage() {
                     </TableCell>
                   </TableRow>
                 ))}
-                {(!data || (data as Reservation[]).length === 0) && (
+                {(!data || data.length === 0) && (
                   <TableRow><TableCell colSpan={10} className="h-32 text-center text-sm text-muted-foreground">Nema rezervacija.</TableCell></TableRow>
                 )}
               </TableBody>
@@ -126,8 +117,6 @@ function ReservationsPage() {
 }
 
 function AddReservationDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {
-  const addFn = useServerFn(adminCreateReservation);
-  const checkFn = useServerFn(checkAvailability);
   const qc = useQueryClient();
   const [form, setForm] = useState({
     full_name: "", vehicle_plate: "", contact_email: "", contact_phone: "",
@@ -139,7 +128,7 @@ function AddReservationDialog({ open, onOpenChange }: { open: boolean; onOpenCha
   async function check() {
     if (!form.arrival_at || !form.departure_at) return;
     try {
-      const res = await checkFn({ data: { arrival_at: new Date(form.arrival_at).toISOString(), departure_at: new Date(form.departure_at).toISOString() } });
+      const res = await checkAvailability(new Date(form.arrival_at).toISOString(), new Date(form.departure_at).toISOString());
       if (res.is_blocked) setAvail("⚠ Parking ne radi u ovom periodu");
       else if (res.available_spots <= 0) setAvail(`Nedostupno (${res.available_spots}/${res.total_spots})`);
       else setAvail(`Dostupno: ${res.available_spots}/${res.total_spots}`);
@@ -150,12 +139,12 @@ function AddReservationDialog({ open, onOpenChange }: { open: boolean; onOpenCha
     e.preventDefault();
     setSubmitting(true);
     try {
-      await addFn({ data: {
+      await adminCreateReservation({
         ...form,
         arrival_at: new Date(form.arrival_at).toISOString(),
         departure_at: new Date(form.departure_at).toISOString(),
         destination: form.destination || null, note: form.note || null,
-      } });
+      });
       toast.success("Rezervacija dodana");
       qc.invalidateQueries({ queryKey: ["admin-reservations"] });
       onOpenChange(false);
