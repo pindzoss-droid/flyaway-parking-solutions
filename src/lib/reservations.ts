@@ -103,6 +103,11 @@ export async function updateReservationStatus(id: number, status: Reservation["s
   if (error) throw new Error(error.message);
 }
 
+export async function deleteReservation(id: number): Promise<void> {
+  const { error } = await supabase.from("reservations").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+}
+
 export async function getAdminSettings() {
   const [{ data: settings, error: e1 }, { data: blocked, error: e2 }] = await Promise.all([
     supabase.from("parking_settings").select("*").eq("id", 1).single(),

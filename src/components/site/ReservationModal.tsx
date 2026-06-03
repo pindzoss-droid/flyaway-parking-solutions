@@ -108,8 +108,8 @@ export function ReservationModal({ open, onOpenChange }: Props) {
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <DateTimeField label={t("form.arrival")} date={arrivalDate} setDate={setArrivalDate} time={arrivalTime} setTime={setArrivalTime} />
-            <DateTimeField label={t("form.departure")} date={departureDate} setDate={setDepartureDate} time={departureTime} setTime={setDepartureTime} />
+            <DateTimeField label={t("form.arrival")} date={arrivalDate} setDate={(d) => { setArrivalDate(d); if (d && departureDate && departureDate < d) setDepartureDate(undefined); }} time={arrivalTime} setTime={setArrivalTime} />
+            <DateTimeField label={t("form.departure")} date={departureDate} setDate={setDepartureDate} time={departureTime} setTime={setDepartureTime} minDate={arrivalDate} />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
@@ -126,7 +126,7 @@ export function ReservationModal({ open, onOpenChange }: Props) {
             {checking && (<span className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" />{t("form.checking")}</span>)}
             {!checking && availability && availability.blocked && (<span className="flex items-center gap-2 text-destructive"><XCircle className="h-4 w-4" />{t("form.blocked")}</span>)}
             {!checking && availability && !availability.blocked && availability.ok && (
-              <span className="flex items-center gap-2 text-success"><CheckCircle2 className="h-4 w-4" />{t("form.available")} ({availability.available}/{availability.total})</span>
+              <span className="flex items-center gap-2 text-success"><CheckCircle2 className="h-4 w-4" />{t("form.available")}</span>
             )}
             {!checking && availability && !availability.blocked && !availability.ok && (
               <span className="flex items-center gap-2 text-destructive"><XCircle className="h-4 w-4" />{t("form.unavailable")}</span>
@@ -152,7 +152,9 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   return <div className="space-y-1.5"><Label>{label}</Label>{children}</div>;
 }
 
-function DateTimeField({ label, date, setDate, time, setTime }: { label: string; date?: Date; setDate: (d?: Date) => void; time: string; setTime: (v: string) => void }) {
+function DateTimeField({ label, date, setDate, time, setTime, minDate }: { label: string; date?: Date; setDate: (d?: Date) => void; time: string; setTime: (v: string) => void; minDate?: Date }) {
+  const today = new Date(new Date().setHours(0, 0, 0, 0));
+  const floor = minDate && minDate > today ? new Date(new Date(minDate).setHours(0, 0, 0, 0)) : today;
   return (
     <div className="space-y-1.5">
       <Label>{label}</Label>
@@ -165,7 +167,7 @@ function DateTimeField({ label, date, setDate, time, setTime }: { label: string;
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
-            <Calendar mode="single" selected={date} onSelect={setDate} initialFocus className={cn("p-3 pointer-events-auto")} disabled={(d) => d < new Date(new Date().setHours(0,0,0,0))} />
+            <Calendar mode="single" selected={date} onSelect={setDate} initialFocus className={cn("p-3 pointer-events-auto")} disabled={(d) => d < floor} />
           </PopoverContent>
         </Popover>
         <Input type="time" value={time} onChange={(e) => setTime(e.target.value)} className="w-28" />

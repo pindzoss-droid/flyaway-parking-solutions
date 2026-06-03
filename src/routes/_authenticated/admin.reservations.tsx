@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { format } from "date-fns";
-import { Loader2, Plus, MoreHorizontal } from "lucide-react";
-import { listReservations, updateReservationStatus, adminCreateReservation, checkAvailability, type Reservation } from "@/lib/reservations";
+import { Loader2, Plus, MoreHorizontal, Trash2 } from "lucide-react";
+import { listReservations, updateReservationStatus, adminCreateReservation, checkAvailability, deleteReservation, type Reservation } from "@/lib/reservations";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -38,6 +38,12 @@ function ReservationsPage() {
   const updateMut = useMutation({
     mutationFn: (vars: { id: number; status: Reservation["status"] }) => updateReservationStatus(vars.id, vars.status),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["admin-reservations"] }); toast.success("Status ažuriran"); },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Greška"),
+  });
+
+  const deleteMut = useMutation({
+    mutationFn: (id: number) => deleteReservation(id),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["admin-reservations"] }); toast.success("Rezervacija obrisana"); },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Greška"),
   });
 
@@ -97,6 +103,14 @@ function ReservationsPage() {
                           <DropdownMenuItem onClick={() => updateMut.mutate({ id: r.id, status: "active" })}>Označi kao aktivna</DropdownMenuItem>
                           <DropdownMenuItem onClick={() => updateMut.mutate({ id: r.id, status: "cancelled" })}>Otkazana</DropdownMenuItem>
                           <DropdownMenuItem onClick={() => updateMut.mutate({ id: r.id, status: "no_show" })}>Nije se pojavio</DropdownMenuItem>
+                          <DropdownMenuItem
+                            className="text-destructive focus:text-destructive"
+                            onClick={() => {
+                              if (window.confirm(`Obrisati rezervaciju #${r.id}? Ova akcija je trajna.`)) deleteMut.mutate(r.id);
+                            }}
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" /> Obriši
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -164,8 +178,8 @@ function AddReservationDialog({ open, onOpenChange }: { open: boolean; onOpenCha
             <Field label="Registracija"><Input required value={form.vehicle_plate} onChange={(e) => set("vehicle_plate", e.target.value)} /></Field>
             <Field label="Email"><Input required type="email" value={form.contact_email} onChange={(e) => set("contact_email", e.target.value)} /></Field>
             <Field label="Telefon"><Input required value={form.contact_phone} onChange={(e) => set("contact_phone", e.target.value)} /></Field>
-            <Field label="Dolazak"><Input required type="datetime-local" value={form.arrival_at} onChange={(e) => set("arrival_at", e.target.value)} onBlur={check} /></Field>
-            <Field label="Odlazak"><Input required type="datetime-local" value={form.departure_at} onChange={(e) => set("departure_at", e.target.value)} onBlur={check} /></Field>
+            <Field label="Dolazak"><Input required type="datetime-local" value={form.arrival_at} onChange={(e) => { set("arrival_at", e.target.value); if (form.departure_at && form.departure_at < e.target.value) set("departure_at", ""); }} onBlur={check} /></Field>
+            <Field label="Odlazak"><Input required type="datetime-local" min={form.arrival_at || undefined} value={form.departure_at} onChange={(e) => set("departure_at", e.target.value)} onBlur={check} /></Field>
             <Field label="Destinacija"><Input value={form.destination} onChange={(e) => set("destination", e.target.value)} /></Field>
             <div className="flex items-center justify-between rounded-md border px-3 py-2">
               <Label>Prevoz do aerodroma</Label>
