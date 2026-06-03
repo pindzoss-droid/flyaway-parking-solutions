@@ -36,7 +36,6 @@ export async function checkAvailability(arrival_at: string, departure_at: string
   const { data, error } = await supabase.rpc("check_availability", {
     _arrival: arrival_at,
     _departure: departure_at,
-    _exclude_id: null,
   });
   if (error) throw new Error(error.message);
   const row = Array.isArray(data) ? data[0] : data;

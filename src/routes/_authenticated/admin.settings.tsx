@@ -1,9 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Loader2, Plus, Trash2 } from "lucide-react";
-import { addBlockedPeriod, getAdminSettings, removeBlockedPeriod, updateSettings } from "@/lib/reservations.functions";
+import { addBlockedPeriod, getAdminSettings, removeBlockedPeriod, updateSettings } from "@/lib/reservations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,13 +15,8 @@ export const Route = createFileRoute("/_authenticated/admin/settings")({
 });
 
 function SettingsPage() {
-  const getFn = useServerFn(getAdminSettings);
-  const updFn = useServerFn(updateSettings);
-  const addFn = useServerFn(addBlockedPeriod);
-  const rmFn = useServerFn(removeBlockedPeriod);
   const qc = useQueryClient();
-
-  const { data, isLoading } = useQuery({ queryKey: ["admin-settings"], queryFn: () => getFn() });
+  const { data, isLoading } = useQuery({ queryKey: ["admin-settings"], queryFn: getAdminSettings });
 
   const [totalSpots, setTotalSpots] = useState(30);
   const [price, setPrice] = useState(15);
@@ -40,19 +34,19 @@ function SettingsPage() {
   }, [data]);
 
   const saveMut = useMutation({
-    mutationFn: () => updFn({ data: { total_spots: totalSpots, price_per_day: price, currency } }),
+    mutationFn: () => updateSettings({ total_spots: totalSpots, price_per_day: price, currency }),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["admin-settings"] }); toast.success("Postavke sačuvane"); },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Greška"),
   });
 
   const addBlockMut = useMutation({
-    mutationFn: () => addFn({ data: { start_date: bStart, end_date: bEnd, reason: bReason || null } }),
+    mutationFn: () => addBlockedPeriod({ start_date: bStart, end_date: bEnd, reason: bReason || null }),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["admin-settings"] }); setBStart(""); setBEnd(""); setBReason(""); toast.success("Blokirani period dodat"); },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Greška"),
   });
 
   const rmBlockMut = useMutation({
-    mutationFn: (id: string) => rmFn({ data: { id } }),
+    mutationFn: (id: string) => removeBlockedPeriod(id),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["admin-settings"] }); toast.success("Obrisano"); },
   });
 
@@ -103,7 +97,7 @@ function SettingsPage() {
 
           <div className="divide-y rounded-md border">
             {data?.blocked?.length === 0 && <div className="p-4 text-sm text-muted-foreground">Nema blokiranih perioda.</div>}
-            {data?.blocked?.map((b: { id: string; start_date: string; end_date: string; reason: string | null }) => (
+            {data?.blocked?.map((b) => (
               <div key={b.id} className="flex items-center justify-between p-3 text-sm">
                 <div>
                   <div className="font-medium">{format(new Date(b.start_date), "dd.MM.yyyy")} — {format(new Date(b.end_date), "dd.MM.yyyy")}</div>

@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
 import { CalendarIcon, Loader2, CheckCircle2, XCircle } from "lucide-react";
-import { useServerFn } from "@tanstack/react-start";
 import { useI18n } from "@/lib/i18n";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -12,7 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { checkAvailability, createReservation, getPublicSettings } from "@/lib/reservations.functions";
+import { checkAvailability, createReservation, getPublicSettings } from "@/lib/reservations";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -34,11 +33,8 @@ function diffDays(a: string | null, b: string | null) {
 
 export function ReservationModal({ open, onOpenChange }: Props) {
   const { t } = useI18n();
-  const checkFn = useServerFn(checkAvailability);
-  const createFn = useServerFn(createReservation);
-  const settingsFn = useServerFn(getPublicSettings);
 
-  const { data: settings } = useQuery({ queryKey: ["public-settings"], queryFn: () => settingsFn() });
+  const { data: settings } = useQuery({ queryKey: ["public-settings"], queryFn: getPublicSettings });
 
   const [arrivalDate, setArrivalDate] = useState<Date | undefined>();
   const [arrivalTime, setArrivalTime] = useState("08:00");
@@ -68,13 +64,13 @@ export function ReservationModal({ open, onOpenChange }: Props) {
     setChecking(true);
     const id = setTimeout(async () => {
       try {
-        const res = await checkFn({ data: { arrival_at: arrivalISO, departure_at: departureISO } });
+        const res = await checkAvailability(arrivalISO, departureISO);
         setAvailability({ ok: !res.is_blocked && res.available_spots > 0, blocked: res.is_blocked, available: res.available_spots, total: res.total_spots });
       } catch { setAvailability(null); }
       finally { setChecking(false); }
     }, 400);
     return () => clearTimeout(id);
-  }, [arrivalISO, departureISO, checkFn]);
+  }, [arrivalISO, departureISO]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -82,16 +78,13 @@ export function ReservationModal({ open, onOpenChange }: Props) {
     if (!availability?.ok) { toast.error(t("form.unavailable")); return; }
     setSubmitting(true);
     try {
-      const res = await createFn({
-        data: {
-          full_name: fullName, vehicle_plate: plate, contact_email: email, contact_phone: phone,
-          arrival_at: arrivalISO, departure_at: departureISO,
-          destination: destination || null, needs_airport_transfer: transfer, note: note || null,
-        },
+      await createReservation({
+        full_name: fullName, vehicle_plate: plate, contact_email: email, contact_phone: phone,
+        arrival_at: arrivalISO, departure_at: departureISO,
+        destination: destination || null, needs_airport_transfer: transfer, note: note || null,
       });
-      toast.success(`${t("form.success")} (${res.estimated_price} ${res.currency})`);
+      toast.success(`${t("form.success")} (~${price} ${settings?.currency ?? "BAM"})`);
       onOpenChange(false);
-      // reset
       setFullName(""); setPlate(""); setEmail(""); setPhone(""); setDestination(""); setNote("");
       setArrivalDate(undefined); setDepartureDate(undefined);
     } catch (err) {
@@ -129,7 +122,6 @@ export function ReservationModal({ open, onOpenChange }: Props) {
 
           <Field label={t("form.note")}><Textarea rows={2} value={note} onChange={(e) => setNote(e.target.value)} /></Field>
 
-          {/* Status */}
           <div className="rounded-lg border bg-muted/40 p-3 text-sm">
             {checking && (<span className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" />{t("form.checking")}</span>)}
             {!checking && availability && availability.blocked && (<span className="flex items-center gap-2 text-destructive"><XCircle className="h-4 w-4" />{t("form.blocked")}</span>)}
