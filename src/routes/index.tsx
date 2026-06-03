@@ -56,10 +56,10 @@ function Hero({ onBook }: { onBook: () => void }) {
         <h1 className="max-w-5xl text-5xl font-extrabold leading-[1.05] sm:text-6xl md:text-6xl">
           {t("hero.title")}
         </h1>
-        <p className="mt-5 max-w-3xl text-5xl font-extrabold leading-[1.05] text-navy-foreground/95 sm:text-6xl md:text-6xl">
+        <p className="mt-2 max-w-3xl text-5xl font-extrabold leading-[1.1] text-navy-foreground/95 sm:text-6xl md:text-6xl">
           {t("hero.subtitle")}
         </p>
-        <p className="mx-auto mt-8 max-w-2xl text-lg text-navy-foreground/80 sm:text-xl">{t("hero.desc")}</p>
+        <p className="mx-auto mt-8 max-w-2xl text-lg font-light text-navy-foreground/80 sm:text-xl">{t("hero.desc")}</p>
         <div className="mt-12 flex flex-wrap justify-center gap-4">
           <Button onClick={onBook} size="lg" className="bg-primary text-primary-foreground hover:bg-primary-hover shadow-cta h-14 px-10 text-base font-bold tracking-wide">
             {t("hero.cta")}
@@ -282,7 +282,7 @@ function Footer() {
 
       <div className="container-park py-16">
         {/* CTA strip — full width */}
-        <div className="mb-8 rounded-2xl border border-white/10 bg-white/[0.03] p-8 text-center shadow-hero">
+        <div className="mb-14 rounded-2xl border border-white/10 bg-white/[0.03] p-8 text-center shadow-hero">
           <h3 className="text-3xl font-bold sm:text-4xl">{t("footer.tagline")}</h3>
           <p className="mt-2 text-navy-foreground/70">Rezerviši online — sigurno mjesto za tvoj auto dok ti letiš.</p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
