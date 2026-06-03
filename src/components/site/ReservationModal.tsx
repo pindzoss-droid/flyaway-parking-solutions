@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { format } from "date-fns";
-import { CalendarIcon, Clock, Loader2, CheckCircle2, XCircle } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { format, parse } from "date-fns";
+import { CalendarIcon, Loader2, CheckCircle2, XCircle } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { checkAvailability, createReservation, getPublicSettings } from "@/lib/reservations";
 import { useQuery } from "@tanstack/react-query";
