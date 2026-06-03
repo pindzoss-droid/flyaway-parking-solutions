@@ -186,7 +186,7 @@ function Location() {
   const { t } = useI18n();
   return (
     <section id="location" className="bg-muted/40 py-24">
-      <div className="container-park grid items-center gap-10 lg:grid-cols-[35fr_65fr]">
+      <div className="container-park grid items-center gap-16 lg:grid-cols-[35fr_65fr]">
         <div className="text-center lg:text-left">
           <h2 className="text-3xl font-bold sm:text-4xl">{t("location.title")}</h2>
           <p className="mt-4 text-muted-foreground">{t("location.desc")}</p>
