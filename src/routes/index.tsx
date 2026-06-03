@@ -113,7 +113,7 @@ function DroneShowcase() {
   ];
   return (
     <section className="bg-muted/40 py-24">
-      <div className="container-park grid items-center gap-10 lg:grid-cols-[65fr_35fr]">
+      <div className="container-park grid items-center gap-16 lg:grid-cols-[65fr_35fr]">
         <div className="order-2 overflow-hidden rounded-2xl shadow-hero lg:order-1">
           <img src={droneImg} alt="Park&Fly aerial view" className="h-[520px] w-full object-cover sm:h-[620px]" />
         </div>
