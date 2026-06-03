@@ -6,7 +6,9 @@ import { ReservationModal } from "@/components/site/ReservationModal";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useI18n } from "@/lib/i18n";
-import droneImg from "@/assets/drone-aerial.png";
+import droneAsset from "@/assets/drone-aerial.png.asset.json";
+
+const droneImg = droneAsset.url;
 
 export const Route = createFileRoute("/")({
   head: () => ({
