@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { format } from "date-fns";
-import { CalendarIcon, Loader2, CheckCircle2, XCircle } from "lucide-react";
+import { CalendarIcon, Clock, Loader2, CheckCircle2, XCircle } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -97,8 +97,7 @@ export function ReservationModal({ open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{t("form.title")}</DialogTitle>
-          <DialogDescription>Park&Fly — Sarajevo</DialogDescription>
+          <DialogTitle className="text-2xl font-bold sm:text-3xl">{t("form.title")}</DialogTitle>
         </DialogHeader>
         <form onSubmit={submit} className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
@@ -124,30 +123,34 @@ export function ReservationModal({ open, onOpenChange }: Props) {
 
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label={t("form.destination")}><Input value={destination} onChange={(e) => setDestination(e.target.value)} placeholder="Istanbul, Vienna…" /></Field>
-            <div className="flex items-center justify-between rounded-md border px-3 py-2">
-              <Label htmlFor="transfer">{t("form.transfer")}</Label>
-              <Switch id="transfer" checked={transfer} onCheckedChange={setTransfer} />
-            </div>
+            <Field label={t("form.transfer")}>
+              <div className="flex h-9 items-center justify-between rounded-md border bg-transparent px-3 shadow-sm">
+                <span className="text-sm text-muted-foreground">{transfer ? "Da" : "Ne"}</span>
+                <Switch id="transfer" checked={transfer} onCheckedChange={setTransfer} />
+              </div>
+            </Field>
           </div>
 
           <Field label={t("form.note")}><Textarea rows={2} value={note} onChange={(e) => setNote(e.target.value)} /></Field>
 
-          <div className="rounded-lg border bg-muted/40 p-3 text-sm">
-            {checking && (<span className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" />{t("form.checking")}</span>)}
-            {!checking && availability && availability.blocked && (<span className="flex items-center gap-2 text-destructive"><XCircle className="h-4 w-4" />{t("form.blocked")}</span>)}
-            {!checking && availability && !availability.blocked && availability.ok && (
-              <span className="flex items-center gap-2 text-success"><CheckCircle2 className="h-4 w-4" />{t("form.available")}</span>
-            )}
-            {!checking && availability && !availability.blocked && !availability.ok && (
-              <span className="flex items-center gap-2 text-destructive"><XCircle className="h-4 w-4" />{t("form.unavailable")}</span>
-            )}
-            {arrivalISO && departureISO && settings && (
-              <div className="mt-2 flex items-center justify-between border-t pt-2">
-                <span className="text-muted-foreground">{t("form.estimate")} · {days} {t("form.days")}</span>
-                <span className="text-lg font-bold text-primary">{price} {settings.currency}</span>
-              </div>
-            )}
-          </div>
+          {(checking || availability) && (
+            <div className="rounded-lg border bg-muted/40 p-3 text-sm">
+              {checking && (<span className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" />{t("form.checking")}</span>)}
+              {!checking && availability && availability.blocked && (<span className="flex items-center gap-2 text-destructive"><XCircle className="h-4 w-4" />{t("form.blocked")}</span>)}
+              {!checking && availability && !availability.blocked && availability.ok && (
+                <span className="flex items-center gap-2 text-success"><CheckCircle2 className="h-4 w-4" />{t("form.available")}</span>
+              )}
+              {!checking && availability && !availability.blocked && !availability.ok && (
+                <span className="flex items-center gap-2 text-destructive"><XCircle className="h-4 w-4" />{t("form.unavailable")}</span>
+              )}
+              {!checking && availability?.ok && arrivalISO && departureISO && settings && (
+                <div className="mt-2 flex items-center justify-between border-t pt-2">
+                  <span className="text-muted-foreground">{t("form.estimate")} · {days} {t("form.days")}</span>
+                  <span className="text-lg font-bold text-primary">{price} {settings.currency}</span>
+                </div>
+              )}
+            </div>
+          )}
 
           <Button type="submit" disabled={submitting || !availability?.ok} className="w-full bg-primary text-primary-foreground hover:bg-primary-hover">
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : t("form.submit")}
@@ -170,6 +173,7 @@ function Field({ label, required, children }: { label: string; required?: boolea
 function DateTimeField({ label, required, date, setDate, time, setTime, minDate }: { label: string; required?: boolean; date?: Date; setDate: (d?: Date) => void; time: string; setTime: (v: string) => void; minDate?: Date }) {
   const today = new Date(new Date().setHours(0, 0, 0, 0));
   const floor = minDate && minDate > today ? new Date(new Date(minDate).setHours(0, 0, 0, 0)) : today;
+  const timeInputRef = useRef<HTMLInputElement>(null);
   return (
     <div className="space-y-1.5">
       <Label>{label} {required && <span className="text-destructive">*</span>}</Label>
@@ -185,7 +189,31 @@ function DateTimeField({ label, required, date, setDate, time, setTime, minDate 
             <Calendar mode="single" selected={date} onSelect={setDate} initialFocus className={cn("p-3 pointer-events-auto")} disabled={(d) => d < floor} />
           </PopoverContent>
         </Popover>
-        <Input type="time" value={time} onChange={(e) => setTime(e.target.value)} className="w-28" />
+        <div className="relative w-32">
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full justify-between text-left font-normal"
+            onClick={() => {
+              const el = timeInputRef.current;
+              if (!el) return;
+              if (typeof el.showPicker === "function") el.showPicker();
+              else el.focus();
+            }}
+          >
+            <span>{time || "—"}</span>
+            <Clock className="ml-2 h-4 w-4 opacity-70" />
+          </Button>
+          <input
+            ref={timeInputRef}
+            type="time"
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
+            className="pointer-events-none absolute inset-0 h-full w-full opacity-0"
+            tabIndex={-1}
+            aria-hidden
+          />
+        </div>
       </div>
     </div>
   );

@@ -53,10 +53,10 @@ function Hero({ onBook }: { onBook: () => void }) {
         <span className="mb-8 inline-flex items-center rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs font-medium tracking-wide text-navy-foreground/90">
           {t("hero.badge")}
         </span>
-        <h1 className="max-w-5xl text-6xl font-extrabold leading-[1.02] sm:text-7xl md:text-8xl">
+        <h1 className="max-w-5xl text-5xl font-extrabold leading-[1.05] sm:text-6xl md:text-6xl">
           {t("hero.title")}
         </h1>
-        <p className="mt-5 max-w-3xl text-2xl font-semibold text-navy-foreground/95 sm:text-3xl">
+        <p className="mt-5 max-w-3xl text-5xl font-extrabold leading-[1.05] text-navy-foreground/95 sm:text-6xl md:text-6xl">
           {t("hero.subtitle")}
         </p>
         <p className="mx-auto mt-8 max-w-2xl text-lg text-navy-foreground/80 sm:text-xl">{t("hero.desc")}</p>
@@ -85,7 +85,7 @@ function Why() {
     <section id="why" className="bg-background py-24">
       <div className="container-park text-center">
         <div className="mx-auto mb-14 max-w-2xl">
-          <h2 className="text-4xl font-bold sm:text-5xl">{t("why.title")}</h2>
+          <h2 className="text-3xl font-bold sm:text-4xl">{t("why.title")}</h2>
           <p className="mt-4 text-muted-foreground">{t("why.subtitle")}</p>
         </div>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -115,10 +115,10 @@ function DroneShowcase() {
     <section className="bg-muted/40 py-24">
       <div className="container-park grid items-center gap-10 lg:grid-cols-[65fr_35fr]">
         <div className="order-2 overflow-hidden rounded-2xl shadow-hero lg:order-1">
-          <img src={droneImg} alt="Park&Fly aerial view" className="h-full w-full object-cover" />
+          <img src={droneImg} alt="Park&Fly aerial view" className="h-[520px] w-full object-cover sm:h-[620px]" />
         </div>
         <div className="order-1 text-center lg:order-2 lg:text-left">
-          <h2 className="text-4xl font-bold sm:text-5xl">{t("drone.title")}</h2>
+          <h2 className="text-3xl font-bold sm:text-4xl">{t("drone.title")}</h2>
           <p className="mt-4 text-muted-foreground">{t("drone.desc")}</p>
           <ul className="mt-6 space-y-3 text-left">
             {points.map((p) => (
@@ -131,7 +131,7 @@ function DroneShowcase() {
           <div className="mt-6 grid grid-cols-3 gap-3 text-center">
             <div className="rounded-xl border bg-card p-3"><div className="text-2xl font-extrabold text-primary">2 min</div><div className="text-xs text-muted-foreground">do terminala</div></div>
             <div className="rounded-xl border bg-card p-3"><div className="text-2xl font-extrabold text-primary">24/7</div><div className="text-xs text-muted-foreground">nadzor</div></div>
-            <div className="rounded-xl border bg-card p-3"><div className="text-2xl font-extrabold text-primary">100%</div><div className="text-xs text-muted-foreground">ograđeno</div></div>
+            <div className="rounded-xl border bg-card p-3"><div className="text-2xl font-extrabold text-primary">100%</div><div className="text-xs text-muted-foreground">sigurno</div></div>
           </div>
         </div>
       </div>
@@ -168,11 +168,11 @@ function Faq() {
   return (
     <section id="faq" className="py-24">
       <div className="container-park mx-auto max-w-3xl text-center">
-        <h2 className="text-4xl font-bold sm:text-5xl">{t("faq.title")}</h2>
+        <h2 className="text-3xl font-bold sm:text-4xl">{t("faq.title")}</h2>
         <Accordion type="single" collapsible className="mt-8 text-left">
           {qs.map((q, i) => (
             <AccordionItem key={i} value={`item-${i}`}>
-              <AccordionTrigger className="text-left text-lg font-bold sm:text-xl">{q.q}</AccordionTrigger>
+              <AccordionTrigger className="text-left text-base font-semibold sm:text-lg">{q.q}</AccordionTrigger>
               <AccordionContent className="text-base text-muted-foreground">{q.a}</AccordionContent>
             </AccordionItem>
           ))}
@@ -188,7 +188,7 @@ function Location() {
     <section id="location" className="bg-muted/40 py-24">
       <div className="container-park grid items-center gap-10 lg:grid-cols-[35fr_65fr]">
         <div className="text-center lg:text-left">
-          <h2 className="text-4xl font-bold sm:text-5xl">{t("location.title")}</h2>
+          <h2 className="text-3xl font-bold sm:text-4xl">{t("location.title")}</h2>
           <p className="mt-4 text-muted-foreground">{t("location.desc")}</p>
           <div className="mt-8 grid gap-3">
             <ContactBox icon={MapPin} label="Adresa" value="Aerodromska bb, Sarajevo" />
@@ -215,7 +215,7 @@ function VideoSection() {
     <section className="py-24">
       <div className="container-park text-center">
         <div className="mx-auto mb-10 max-w-2xl">
-          <h2 className="text-4xl font-bold sm:text-5xl">{t("video.title")}</h2>
+          <h2 className="text-3xl font-bold sm:text-4xl">{t("video.title")}</h2>
           <p className="mt-3 text-muted-foreground">{t("video.desc")}</p>
         </div>
         <div className="mx-auto flex aspect-video max-w-4xl items-center justify-center rounded-2xl border bg-muted text-muted-foreground shadow-card">
@@ -235,7 +235,7 @@ function Reviews() {
     <section className="bg-muted/40 py-24">
       <div className="container-park text-center">
         <div className="mx-auto mb-10 max-w-2xl">
-          <h2 className="text-4xl font-bold sm:text-5xl">{t("reviews.title")}</h2>
+          <h2 className="text-3xl font-bold sm:text-4xl">{t("reviews.title")}</h2>
           <p className="mt-3 text-muted-foreground">{t("reviews.desc")}</p>
         </div>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
