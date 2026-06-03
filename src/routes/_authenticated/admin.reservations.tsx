@@ -67,7 +67,7 @@ function ReservationsPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>ID</TableHead>
+                  <TableHead className="pl-6">ID</TableHead>
                   <TableHead>Ime i prezime</TableHead>
                   <TableHead>Registracija</TableHead>
                   <TableHead>Telefon</TableHead>
@@ -76,25 +76,25 @@ function ReservationsPage() {
                   <TableHead>Destinacija</TableHead>
                   <TableHead>Cijena</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Akcije</TableHead>
+                  <TableHead className="pr-6 text-right">Akcije</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {data?.map((r) => (
                   <TableRow key={r.id}>
-                    <TableCell className="font-mono text-xs">#{r.id}</TableCell>
+                    <TableCell className="pl-6 font-mono text-xs">#{r.id}</TableCell>
                     <TableCell>
                       <div className="font-medium">{r.full_name}</div>
                       <div className="text-xs text-muted-foreground">{r.contact_email}</div>
                     </TableCell>
-                    <TableCell className="font-mono">{r.vehicle_plate}</TableCell>
+                    <TableCell className="font-mono uppercase">{r.vehicle_plate}</TableCell>
                     <TableCell>{r.contact_phone}</TableCell>
                     <TableCell className="text-xs">{format(new Date(r.arrival_at), "dd.MM.yyyy HH:mm")}</TableCell>
                     <TableCell className="text-xs">{format(new Date(r.departure_at), "dd.MM.yyyy HH:mm")}</TableCell>
                     <TableCell>{r.destination ?? "—"}</TableCell>
                     <TableCell>{Number(r.estimated_price).toFixed(2)}</TableCell>
                     <TableCell><StatusBadge status={r.status} /></TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="pr-6 text-right">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" size="icon"><MoreHorizontal className="h-4 w-4" /></Button>
@@ -175,7 +175,7 @@ function AddReservationDialog({ open, onOpenChange }: { open: boolean; onOpenCha
         <form onSubmit={submit} className="space-y-3">
           <div className="grid gap-3 sm:grid-cols-2">
             <Field label="Ime i prezime"><Input required value={form.full_name} onChange={(e) => set("full_name", e.target.value)} /></Field>
-            <Field label="Registracija"><Input required value={form.vehicle_plate} onChange={(e) => set("vehicle_plate", e.target.value)} /></Field>
+            <Field label="Registracija" required><Input required value={form.vehicle_plate} onChange={(e) => set("vehicle_plate", e.target.value.toUpperCase())} className="font-mono uppercase tracking-wider" style={{ textTransform: "uppercase" }} /></Field>
             <Field label="Email"><Input required type="email" value={form.contact_email} onChange={(e) => set("contact_email", e.target.value)} /></Field>
             <Field label="Telefon"><Input required value={form.contact_phone} onChange={(e) => set("contact_phone", e.target.value)} /></Field>
             <Field label="Dolazak"><Input required type="datetime-local" value={form.arrival_at} onChange={(e) => { set("arrival_at", e.target.value); if (form.departure_at && form.departure_at < e.target.value) set("departure_at", ""); }} onBlur={check} /></Field>
