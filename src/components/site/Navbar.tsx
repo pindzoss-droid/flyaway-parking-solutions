@@ -101,7 +101,7 @@ export function Navbar({ onBook }: { onBook: () => void }) {
       </div>
 
       {open && (
-        <div className="border-t border-white/10 bg-navy md:hidden">
+        <div className="border-t border-white/10 bg-navy lg:hidden">
           <div className="container-park flex flex-col gap-3 py-4">
             {links.map((l) => (
               <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="text-sm font-medium text-navy-foreground/80">
