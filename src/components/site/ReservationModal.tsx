@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { format } from "date-fns";
 import { CalendarIcon, Clock, Loader2, CheckCircle2, XCircle } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
