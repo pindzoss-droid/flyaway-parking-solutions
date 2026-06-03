@@ -103,6 +103,14 @@ function ReservationsPage() {
                           <DropdownMenuItem onClick={() => updateMut.mutate({ id: r.id, status: "active" })}>Označi kao aktivna</DropdownMenuItem>
                           <DropdownMenuItem onClick={() => updateMut.mutate({ id: r.id, status: "cancelled" })}>Otkazana</DropdownMenuItem>
                           <DropdownMenuItem onClick={() => updateMut.mutate({ id: r.id, status: "no_show" })}>Nije se pojavio</DropdownMenuItem>
+                          <DropdownMenuItem
+                            className="text-destructive focus:text-destructive"
+                            onClick={() => {
+                              if (window.confirm(`Obrisati rezervaciju #${r.id}? Ova akcija je trajna.`)) deleteMut.mutate(r.id);
+                            }}
+                          >
+                            <Trash2 className="mr-2 h-4 w-4" /> Obriši
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
