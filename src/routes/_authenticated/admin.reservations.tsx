@@ -273,3 +273,12 @@ function AddReservationDialog({ open, onOpenChange }: { open: boolean; onOpenCha
     </Dialog>
   );
 }
+
+function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
+  return (
+    <div className="space-y-1.5">
+      <Label>{label} {required && <span className="text-destructive">*</span>}</Label>
+      {children}
+    </div>
+  );
+}
