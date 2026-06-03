@@ -190,29 +190,20 @@ function DateTimeField({ label, required, date, setDate, time, setTime, minDate 
           </PopoverContent>
         </Popover>
         <div className="relative w-32">
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full justify-between text-left font-normal"
-            onClick={() => {
-              const el = timeInputRef.current;
-              if (!el) return;
-              if (typeof el.showPicker === "function") el.showPicker();
-              else el.focus();
-            }}
-          >
-            <span>{time || "—"}</span>
-            <Clock className="ml-2 h-4 w-4 opacity-70" />
-          </Button>
           <input
             ref={timeInputRef}
             type="time"
             value={time}
             onChange={(e) => setTime(e.target.value)}
-            className="pointer-events-none absolute inset-0 h-full w-full opacity-0"
-            tabIndex={-1}
-            aria-hidden
+            onClick={() => {
+              const el = timeInputRef.current;
+              if (el && typeof el.showPicker === "function") {
+                try { el.showPicker(); } catch { /* ignore */ }
+              }
+            }}
+            className="flex h-10 w-full cursor-pointer rounded-md border border-input bg-background px-3 py-2 pr-9 text-sm ring-offset-background hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
           />
+          <Clock className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 opacity-70" />
         </div>
       </div>
     </div>
