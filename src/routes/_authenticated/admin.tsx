@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet, Link, useRouterState, useNavigate } from "@tanstack/react-router";
-import { CalendarDays, Settings as SettingsIcon, LogOut, Home } from "lucide-react";
+import { CalendarDays, Settings as SettingsIcon, LogOut, Home, LayoutDashboard } from "lucide-react";
 import { SidebarProvider, Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarTrigger, SidebarFooter } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,6 +11,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 });
 
 const items = [
+  { url: "/admin", title: "Pregled", icon: LayoutDashboard, exact: true },
   { url: "/admin/reservations", title: "Rezervacije", icon: CalendarDays },
   { url: "/admin/settings", title: "Postavke", icon: SettingsIcon },
 ];
@@ -41,7 +42,7 @@ function AdminLayout() {
                 <SidebarMenu>
                   {items.map((it) => (
                     <SidebarMenuItem key={it.url}>
-                      <SidebarMenuButton asChild isActive={path === it.url}>
+                      <SidebarMenuButton asChild isActive={it.exact ? path === it.url : path === it.url}>
                         <Link to={it.url} className="flex items-center gap-2">
                           <it.icon className="h-4 w-4" />
                           <span>{it.title}</span>
