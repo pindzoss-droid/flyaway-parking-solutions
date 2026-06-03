@@ -54,7 +54,7 @@ export function Navbar({ onBook }: { onBook: () => void }) {
           <span className="text-xl font-bold tracking-tight">FLY</span>
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav className="hidden items-center gap-6 lg:flex">
           {links.map((l) => (
             <a key={l.href} href={l.href} className="text-sm font-medium text-navy-foreground/80 hover:text-primary transition-colors">
               {l.label}
@@ -62,7 +62,7 @@ export function Navbar({ onBook }: { onBook: () => void }) {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-2 md:flex">
+        <div className="hidden items-center gap-2 lg:flex">
           <a
             href="https://wa.me/"
             target="_blank"
@@ -95,7 +95,7 @@ export function Navbar({ onBook }: { onBook: () => void }) {
           </Button>
         </div>
 
-        <button onClick={() => setOpen(!open)} className="rounded-md p-2 text-navy-foreground md:hidden" aria-label="Menu">
+        <button onClick={() => setOpen(!open)} className="rounded-md p-2 text-navy-foreground lg:hidden" aria-label="Menu">
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
