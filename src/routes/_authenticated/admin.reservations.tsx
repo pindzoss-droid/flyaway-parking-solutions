@@ -178,8 +178,8 @@ function AddReservationDialog({ open, onOpenChange }: { open: boolean; onOpenCha
             <Field label="Registracija"><Input required value={form.vehicle_plate} onChange={(e) => set("vehicle_plate", e.target.value)} /></Field>
             <Field label="Email"><Input required type="email" value={form.contact_email} onChange={(e) => set("contact_email", e.target.value)} /></Field>
             <Field label="Telefon"><Input required value={form.contact_phone} onChange={(e) => set("contact_phone", e.target.value)} /></Field>
-            <Field label="Dolazak"><Input required type="datetime-local" value={form.arrival_at} onChange={(e) => set("arrival_at", e.target.value)} onBlur={check} /></Field>
-            <Field label="Odlazak"><Input required type="datetime-local" value={form.departure_at} onChange={(e) => set("departure_at", e.target.value)} onBlur={check} /></Field>
+            <Field label="Dolazak"><Input required type="datetime-local" value={form.arrival_at} onChange={(e) => { set("arrival_at", e.target.value); if (form.departure_at && form.departure_at < e.target.value) set("departure_at", ""); }} onBlur={check} /></Field>
+            <Field label="Odlazak"><Input required type="datetime-local" min={form.arrival_at || undefined} value={form.departure_at} onChange={(e) => set("departure_at", e.target.value)} onBlur={check} /></Field>
             <Field label="Destinacija"><Input value={form.destination} onChange={(e) => set("destination", e.target.value)} /></Field>
             <div className="flex items-center justify-between rounded-md border px-3 py-2">
               <Label>Prevoz do aerodroma</Label>
