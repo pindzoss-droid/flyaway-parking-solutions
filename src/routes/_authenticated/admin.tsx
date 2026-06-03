@@ -42,7 +42,7 @@ function AdminLayout() {
                 <SidebarMenu>
                   {items.map((it) => (
                     <SidebarMenuItem key={it.url}>
-                      <SidebarMenuButton asChild isActive={path === it.url}>
+                      <SidebarMenuButton asChild isActive={it.exact ? path === it.url : path === it.url}>
                         <Link to={it.url} className="flex items-center gap-2">
                           <it.icon className="h-4 w-4" />
                           <span>{it.title}</span>
