@@ -347,7 +347,6 @@ function Footer() {
           </div>
         </div>
       </div>
-      </div>
 
       <div className="border-t border-white/10">
         <div className="container-park flex flex-col items-center justify-between gap-3 py-5 text-xs text-navy-foreground/60 sm:flex-row">
