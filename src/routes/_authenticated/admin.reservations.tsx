@@ -131,78 +131,145 @@ function ReservationsPage() {
   );
 }
 
+function combine(date: Date | undefined, time: string): string | null {
+  if (!date) return null;
+  const [h, m] = time.split(":").map(Number);
+  const d = new Date(date);
+  d.setHours(h || 0, m || 0, 0, 0);
+  return d.toISOString();
+}
+
+function diffDays(a: string | null, b: string | null) {
+  if (!a || !b) return 0;
+  const ms = new Date(b).getTime() - new Date(a).getTime();
+  return Math.max(1, Math.ceil(ms / 86400000));
+}
+
 function AddReservationDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {
   const qc = useQueryClient();
-  const [form, setForm] = useState({
-    full_name: "", vehicle_plate: "", contact_email: "", contact_phone: "",
-    arrival_at: "", departure_at: "", destination: "", needs_airport_transfer: true, note: "",
-  });
-  const [submitting, setSubmitting] = useState(false);
-  const [avail, setAvail] = useState<string | null>(null);
+  const { data: settings } = useQuery({ queryKey: ["public-settings"], queryFn: getPublicSettings });
 
-  async function check() {
-    if (!form.arrival_at || !form.departure_at) return;
-    try {
-      const res = await checkAvailability(new Date(form.arrival_at).toISOString(), new Date(form.departure_at).toISOString());
-      if (res.is_blocked) setAvail("⚠ Parking ne radi u ovom periodu");
-      else if (res.available_spots <= 0) setAvail(`Nedostupno (${res.available_spots}/${res.total_spots})`);
-      else setAvail(`Dostupno: ${res.available_spots}/${res.total_spots}`);
-    } catch (e) { setAvail(e instanceof Error ? e.message : "Greška"); }
-  }
+  const today = useMemo(() => new Date(new Date().setHours(0, 0, 0, 0)), []);
+  const [arrivalDate, setArrivalDate] = useState<Date | undefined>(today);
+  const [arrivalTime, setArrivalTime] = useState("08:00");
+  const [departureDate, setDepartureDate] = useState<Date | undefined>();
+  const [departureTime, setDepartureTime] = useState("20:00");
+
+  const [fullName, setFullName] = useState("");
+  const [plate, setPlate] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [destination, setDestination] = useState("");
+  const [transfer, setTransfer] = useState(true);
+  const [note, setNote] = useState("");
+
+  const [availability, setAvailability] = useState<null | { ok: boolean; blocked: boolean; available: number; total: number }>(null);
+  const [checking, setChecking] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const arrivalISO = useMemo(() => combine(arrivalDate, arrivalTime), [arrivalDate, arrivalTime]);
+  const departureISO = useMemo(() => combine(departureDate, departureTime), [departureDate, departureTime]);
+  const days = diffDays(arrivalISO, departureISO);
+  const price = settings ? +(days * Number(settings.price_per_day)).toFixed(2) : 0;
+
+  useEffect(() => {
+    if (!arrivalISO || !departureISO) { setAvailability(null); return; }
+    if (new Date(departureISO) <= new Date(arrivalISO)) { setAvailability(null); return; }
+    setChecking(true);
+    const id = setTimeout(async () => {
+      try {
+        const res = await checkAvailability(arrivalISO, departureISO);
+        setAvailability({ ok: !res.is_blocked && res.available_spots > 0, blocked: res.is_blocked, available: res.available_spots, total: res.total_spots });
+      } catch { setAvailability(null); }
+      finally { setChecking(false); }
+    }, 400);
+    return () => clearTimeout(id);
+  }, [arrivalISO, departureISO]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (!arrivalISO || !departureISO) { toast.error("Odaberi datum i vrijeme"); return; }
+    if (!availability?.ok) { toast.error("Nedostupno u odabranom periodu"); return; }
     setSubmitting(true);
     try {
       await adminCreateReservation({
-        ...form,
-        arrival_at: new Date(form.arrival_at).toISOString(),
-        departure_at: new Date(form.departure_at).toISOString(),
-        destination: form.destination || null, note: form.note || null,
+        full_name: fullName, vehicle_plate: plate, contact_email: email, contact_phone: phone,
+        arrival_at: arrivalISO, departure_at: departureISO,
+        destination: destination || null, needs_airport_transfer: transfer, note: note || null,
       });
-      toast.success("Rezervacija dodana");
+      toast.success(`Rezervacija dodana (~${price} ${settings?.currency ?? "BAM"})`);
       qc.invalidateQueries({ queryKey: ["admin-reservations"] });
       onOpenChange(false);
+      setFullName(""); setPlate(""); setEmail(""); setPhone(""); setDestination(""); setNote("");
+      setArrivalDate(today); setDepartureDate(undefined);
     } catch (err) { toast.error(err instanceof Error ? err.message : "Greška"); }
     finally { setSubmitting(false); }
   }
 
-  const set = (k: keyof typeof form, v: string | boolean) => setForm((f) => ({ ...f, [k]: v }));
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
-        <DialogHeader><DialogTitle>Nova rezervacija</DialogTitle></DialogHeader>
-        <form onSubmit={submit} className="space-y-3">
-          <div className="grid gap-3 sm:grid-cols-2">
-            <Field label="Ime i prezime" required><Input required value={form.full_name} onChange={(e) => set("full_name", e.target.value)} /></Field>
-            <Field label="Registracija" required><Input required value={form.vehicle_plate} onChange={(e) => set("vehicle_plate", e.target.value.toUpperCase())} className="font-mono uppercase tracking-wider" style={{ textTransform: "uppercase" }} /></Field>
-            <Field label="Email" required><Input required type="email" value={form.contact_email} onChange={(e) => set("contact_email", e.target.value)} /></Field>
-            <Field label="Telefon" required><Input required value={form.contact_phone} onChange={(e) => set("contact_phone", e.target.value)} /></Field>
-            <Field label="Dolazak" required><Input required type="datetime-local" value={form.arrival_at} onChange={(e) => { set("arrival_at", e.target.value); if (form.departure_at && form.departure_at < e.target.value) set("departure_at", ""); }} onBlur={check} /></Field>
-            <Field label="Odlazak" required><Input required type="datetime-local" min={form.arrival_at || undefined} value={form.departure_at} onChange={(e) => set("departure_at", e.target.value)} onBlur={check} /></Field>
-            <Field label="Destinacija"><Input value={form.destination} onChange={(e) => set("destination", e.target.value)} /></Field>
-            <div className="flex items-center justify-between rounded-md border px-3 py-2">
-              <Label>Prevoz do aerodroma</Label>
-              <Switch checked={form.needs_airport_transfer} onCheckedChange={(v) => set("needs_airport_transfer", v)} />
-            </div>
+        <DialogHeader className="pb-2">
+          <DialogTitle className="text-2xl font-bold sm:text-3xl">Nova rezervacija</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={submit} className="space-y-4">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field label="Ime i prezime" required><Input required value={fullName} onChange={(e) => setFullName(e.target.value)} /></Field>
+            <Field label="Registracija" required>
+              <Input
+                required
+                value={plate}
+                onChange={(e) => setPlate(e.target.value.toUpperCase())}
+                placeholder="A12-B-345"
+                className="font-mono uppercase tracking-wider"
+                style={{ textTransform: "uppercase" }}
+              />
+            </Field>
+            <Field label="Email" required><Input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} /></Field>
+            <Field label="Telefon" required><Input required value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+387 …" /></Field>
           </div>
-          <Field label="Napomena"><Textarea rows={2} value={form.note} onChange={(e) => set("note", e.target.value)} /></Field>
-          {avail && <div className="rounded-md bg-muted/40 p-2 text-sm">{avail}</div>}
-          <Button type="submit" disabled={submitting} className="w-full bg-primary text-primary-foreground hover:bg-primary-hover">
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <DateTimeField dateLabel="Datum dolaska" timeLabel="Vrijeme dolaska" required date={arrivalDate} setDate={(d) => { setArrivalDate(d); if (d && departureDate && departureDate < d) setDepartureDate(undefined); }} time={arrivalTime} setTime={setArrivalTime} />
+            <DateTimeField dateLabel="Datum odlaska" timeLabel="Vrijeme odlaska" required date={departureDate} setDate={setDepartureDate} time={departureTime} setTime={setDepartureTime} minDate={arrivalDate} />
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field label="Destinacija"><Input value={destination} onChange={(e) => setDestination(e.target.value)} placeholder="Istanbul, Vienna…" /></Field>
+            <Field label="Prevoz do aerodroma">
+              <div className="flex h-9 items-center justify-between rounded-md border bg-transparent px-3 shadow-sm">
+                <span className="text-sm text-muted-foreground">{transfer ? "Da" : "Ne"}</span>
+                <Switch id="transfer" checked={transfer} onCheckedChange={setTransfer} />
+              </div>
+            </Field>
+          </div>
+
+          <Field label="Napomena"><Textarea rows={2} value={note} onChange={(e) => setNote(e.target.value)} /></Field>
+
+          {(checking || availability) && (
+            <div className="rounded-lg border bg-muted/40 p-3 text-sm">
+              {checking && (<span className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" />Provjeravam dostupnost…</span>)}
+              {!checking && availability && availability.blocked && (<span className="flex items-center gap-2 text-destructive"><XCircle className="h-4 w-4" />Parking ne radi u ovom periodu</span>)}
+              {!checking && availability && !availability.blocked && availability.ok && (
+                <span className="flex items-center gap-2 text-success"><CheckCircle2 className="h-4 w-4" />Dostupno ({availability.available}/{availability.total})</span>
+              )}
+              {!checking && availability && !availability.blocked && !availability.ok && (
+                <span className="flex items-center gap-2 text-destructive"><XCircle className="h-4 w-4" />Nedostupno u odabranom periodu</span>
+              )}
+              {!checking && availability?.ok && arrivalISO && departureISO && settings && (
+                <div className="mt-2 flex items-center justify-between border-t pt-2">
+                  <span className="text-muted-foreground">Procjena cijene · {days} dana</span>
+                  <span className="text-lg font-bold text-primary">{price} {settings.currency}</span>
+                </div>
+              )}
+            </div>
+          )}
+
+          <Button type="submit" disabled={submitting || !availability?.ok} className="w-full bg-primary text-primary-foreground hover:bg-primary-hover">
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Dodaj rezervaciju"}
           </Button>
         </form>
       </DialogContent>
     </Dialog>
-  );
-}
-
-function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
-  return (
-    <div className="space-y-1.5">
-      <Label>{label} {required && <span className="text-destructive">*</span>}</Label>
-      {children}
-    </div>
   );
 }
