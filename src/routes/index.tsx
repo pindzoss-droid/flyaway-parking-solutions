@@ -107,9 +107,9 @@ function Why() {
 function DroneShowcase() {
   const { t } = useI18n();
   const points = [
-    { icon: Plane, label: "Direktan vizuelni pristup pisti aerodroma" },
-    { icon: ShieldCheck, label: "Ograđen prostor pod kontrolom 24/7" },
-    { icon: Bus, label: "Shuttle vozilo uvijek na lokaciji" },
+    { icon: MapPin, label: t("drone.p1") },
+    { icon: Shield, label: t("drone.p2") },
+    { icon: ShieldCheck, label: t("drone.p3") },
   ];
   return (
     <section className="bg-muted/40 py-24">
