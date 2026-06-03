@@ -53,10 +53,10 @@ function Hero({ onBook }: { onBook: () => void }) {
         <span className="mb-8 inline-flex items-center rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs font-medium tracking-wide text-navy-foreground/90">
           {t("hero.badge")}
         </span>
-        <h1 className="max-w-5xl text-6xl font-extrabold leading-[1.02] sm:text-7xl md:text-8xl">
+        <h1 className="max-w-5xl text-5xl font-extrabold leading-[1.05] sm:text-6xl md:text-6xl">
           {t("hero.title")}
         </h1>
-        <p className="mt-5 max-w-3xl text-2xl font-semibold text-navy-foreground/95 sm:text-3xl">
+        <p className="mt-5 max-w-3xl text-5xl font-extrabold leading-[1.05] text-navy-foreground/95 sm:text-6xl md:text-6xl">
           {t("hero.subtitle")}
         </p>
         <p className="mx-auto mt-8 max-w-2xl text-lg text-navy-foreground/80 sm:text-xl">{t("hero.desc")}</p>
