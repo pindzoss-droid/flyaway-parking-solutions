@@ -122,3 +122,31 @@ function SettingsPage() {
     </div>
   );
 }
+
+function DateInput({ label, value, onChange, min }: { label: string; value: string; onChange: (v: string) => void; min?: string }) {
+  const date = value ? new Date(value) : undefined;
+  const minDate = min ? new Date(min) : undefined;
+  return (
+    <div className="space-y-1.5">
+      <Label>{label}</Label>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button type="button" variant="outline" className={cn("w-full justify-between text-left font-normal", !date && "text-muted-foreground")}>
+            <span>{date ? format(date, "dd.MM.yyyy") : "—"}</span>
+            <CalendarIcon className="ml-2 h-4 w-4 opacity-70" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0" align="end">
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={(d) => onChange(d ? format(d, "yyyy-MM-dd") : "")}
+            initialFocus
+            className={cn("p-3 pointer-events-auto")}
+            disabled={minDate ? (d) => d < minDate : undefined}
+          />
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+}
