@@ -41,6 +41,12 @@ function ReservationsPage() {
     onError: (e) => toast.error(e instanceof Error ? e.message : "Greška"),
   });
 
+  const deleteMut = useMutation({
+    mutationFn: (id: number) => deleteReservation(id),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["admin-reservations"] }); toast.success("Rezervacija obrisana"); },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Greška"),
+  });
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
