@@ -10,7 +10,8 @@ const dict = {
     "nav.contact": "Kontakt",
     "nav.book": "Rezerviši online",
     "nav.admin": "Admin",
-    "hero.title": "PARK&FLY — privatni parking nadomak aerodroma Sarajevo",
+    "hero.title": "PARK&FLY",
+    "hero.subtitle": "privatni parking nadomak aerodroma Sarajevo",
     "hero.desc":
       "Sigurno mjesto za vaše vozilo, samo 2 minute od aerodroma. 24/7 videonadzor, fizičko obezbjeđenje, besplatan transport do aerodroma i opcija rent a car kad god vam zatreba.",
     "hero.cta": "REZERVIŠI ONLINE",
@@ -77,7 +78,8 @@ const dict = {
     "nav.contact": "Contact",
     "nav.book": "Book online",
     "nav.admin": "Admin",
-    "hero.title": "PARK&FLY — private parking next to Sarajevo Airport",
+    "hero.title": "PARK&FLY",
+    "hero.subtitle": "private parking next to Sarajevo Airport",
     "hero.desc":
       "A safe spot for your vehicle, just 2 minutes from the airport. 24/7 CCTV, on-site security, free airport shuttle and rent-a-car on demand.",
     "hero.cta": "BOOK ONLINE",
