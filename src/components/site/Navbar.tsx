@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
+import logoAsset from "@/assets/logo.png.asset.json";
 
 function WhatsAppIcon({ className }: { className?: string }) {
   return (
@@ -48,10 +49,8 @@ export function Navbar({ onBook }: { onBook: () => void }) {
       }`}
     >
       <div className="container-park flex h-16 items-center justify-between">
-        <Link to="/" className="flex items-center gap-1 text-navy-foreground">
-          <span className="text-xl font-bold tracking-tight">PARK</span>
-          <span className="text-xl font-bold text-primary">&</span>
-          <span className="text-xl font-bold tracking-tight">FLY</span>
+        <Link to="/" className="flex items-center text-navy-foreground" aria-label="PARK & FLY">
+          <img src={logoAsset.url} alt="PARK & FLY" className="h-8 w-auto max-w-[150px] object-contain" />
         </Link>
 
         <nav className="hidden items-center gap-6 lg:flex">
