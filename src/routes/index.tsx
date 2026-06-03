@@ -59,7 +59,7 @@ function Hero({ onBook }: { onBook: () => void }) {
         <p className="mt-2 max-w-3xl text-5xl font-extrabold leading-[1.1] text-navy-foreground/95 sm:text-6xl md:text-6xl">
           {t("hero.subtitle")}
         </p>
-        <p className="mx-auto mt-8 max-w-2xl text-lg font-normal text-navy-foreground/80 sm:text-xl">{t("hero.desc")}</p>
+        <p className="mx-auto mt-8 max-w-2xl text-lg font-light text-navy-foreground/80 sm:text-xl">{t("hero.desc")}</p>
         <div className="mt-12 flex flex-wrap justify-center gap-4">
           <Button onClick={onBook} size="lg" className="bg-primary text-primary-foreground hover:bg-primary-hover shadow-cta h-14 px-10 text-base font-bold tracking-wide">
             {t("hero.cta")}
