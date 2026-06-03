@@ -82,9 +82,9 @@ function Why() {
     { icon: Car, t: t("why.rentcar.t"), d: t("why.rentcar.d") },
   ];
   return (
-    <section id="why" className="bg-background py-24">
+    <section id="why" className="bg-background py-28">
       <div className="container-park text-center">
-        <div className="mx-auto mb-14 max-w-2xl">
+        <div className="mx-auto mb-16 max-w-2xl">
           <h2 className="text-3xl font-bold sm:text-4xl">{t("why.title")}</h2>
           <p className="mt-4 text-muted-foreground">{t("why.subtitle")}</p>
         </div>
@@ -113,7 +113,7 @@ function DroneShowcase() {
   ];
   return (
     <section className="bg-muted/40 py-24">
-      <div className="container-park grid items-center gap-10 lg:grid-cols-[65fr_35fr]">
+      <div className="container-park grid items-center gap-16 lg:grid-cols-[65fr_35fr]">
         <div className="order-2 overflow-hidden rounded-2xl shadow-hero lg:order-1">
           <img src={droneImg} alt="Park&Fly aerial view" className="h-[520px] w-full object-cover sm:h-[620px]" />
         </div>
@@ -186,7 +186,7 @@ function Location() {
   const { t } = useI18n();
   return (
     <section id="location" className="bg-muted/40 py-24">
-      <div className="container-park grid items-center gap-10 lg:grid-cols-[35fr_65fr]">
+      <div className="container-park grid items-center gap-16 lg:grid-cols-[35fr_65fr]">
         <div className="text-center lg:text-left">
           <h2 className="text-3xl font-bold sm:text-4xl">{t("location.title")}</h2>
           <p className="mt-4 text-muted-foreground">{t("location.desc")}</p>
