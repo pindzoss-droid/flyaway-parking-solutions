@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
-import { Loader2, Plus, MoreHorizontal, Trash2 } from "lucide-react";
-import { listReservations, updateReservationStatus, adminCreateReservation, checkAvailability, deleteReservation, type Reservation } from "@/lib/reservations";
+import { Loader2, Plus, MoreHorizontal, Trash2, CheckCircle2, XCircle } from "lucide-react";
+import { listReservations, updateReservationStatus, adminCreateReservation, checkAvailability, getPublicSettings, deleteReservation, type Reservation } from "@/lib/reservations";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { DateTimeField } from "@/components/site/DateTimeField";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/admin/reservations")({
