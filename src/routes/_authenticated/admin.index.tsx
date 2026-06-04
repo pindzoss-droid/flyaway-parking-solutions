@@ -117,6 +117,47 @@ function AdminHome() {
         </div>
       </div>
 
+      {/* Revenue by month */}
+      <div className="rounded-xl border bg-card p-5 shadow-card">
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <h3 className="text-sm font-semibold">Prihodi po mjesecima</h3>
+            <p className="text-xs text-muted-foreground">Zadnjih 12 mjeseci (aktivne rezervacije)</p>
+          </div>
+          <span className="text-xs text-muted-foreground">Ukupno: {stats.revenueTotal.toFixed(2)} {currency}</span>
+        </div>
+        <div className="h-64 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={stats.monthlyRevenue} margin={{ top: 5, right: 10, left: -10, bottom: 0 }}>
+              <defs>
+                <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="var(--primary)" stopOpacity={0.9} />
+                  <stop offset="100%" stopColor="var(--primary)" stopOpacity={0.4} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+              <XAxis dataKey="label" tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" />
+              <YAxis tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" />
+              <Tooltip
+                contentStyle={{ background: "var(--popover)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 }}
+                formatter={(v: number) => [`${v.toFixed(2)} ${currency}`, "Prihod"]}
+                labelFormatter={(l, p) => p?.[0]?.payload?.fullLabel ?? l}
+              />
+              <Bar dataKey="revenue" radius={[6, 6, 0, 0]} fill="url(#revGrad)" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {stats.monthlyRevenue.slice(-4).map((m) => (
+            <div key={m.key} className="rounded-lg border bg-muted/30 p-3">
+              <div className="text-[10px] uppercase tracking-wide text-muted-foreground">{m.fullLabel}</div>
+              <div className="mt-1 text-sm font-semibold">{m.revenue.toFixed(2)} {currency}</div>
+              <div className="text-[11px] text-muted-foreground">{m.count} rez.</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Upcoming */}
       <div className="rounded-xl border bg-card p-5 shadow-card">
         <div className="mb-4 flex items-center justify-between">
