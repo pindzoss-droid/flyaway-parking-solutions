@@ -73,8 +73,11 @@ function StatusBadge({ status }: { status: string }) {
 function ReservationsPage() {
   const qc = useQueryClient();
   const [addOpen, setAddOpen] = useState(false);
+  const [sortKey, setSortKey] = useState<SortKey>("arrival_asc");
 
   const { data, isLoading } = useQuery({ queryKey: ["admin-reservations"], queryFn: listReservations });
+
+  const sorted = useMemo(() => (data ? sortReservations(data, sortKey) : []), [data, sortKey]);
 
   const updateMut = useMutation({
     mutationFn: (vars: { id: number; status: Reservation["status"] }) => updateReservationStatus(vars.id, vars.status),
@@ -90,14 +93,26 @@ function ReservationsPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-3">
         <div>
           <h2 className="text-2xl font-bold">Rezervacije</h2>
           <p className="text-sm text-muted-foreground">Pregled svih rezervacija i ručno dodavanje.</p>
         </div>
-        <Button onClick={() => setAddOpen(true)} className="bg-primary text-primary-foreground hover:bg-primary-hover">
-          <Plus className="mr-2 h-4 w-4" /> Nova rezervacija
-        </Button>
+        <div className="flex items-center gap-2">
+          <Select value={sortKey} onValueChange={(v) => setSortKey(v as SortKey)}>
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Sortiraj po…" />
+            </SelectTrigger>
+            <SelectContent>
+              {SORT_OPTIONS.map((o) => (
+                <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button onClick={() => setAddOpen(true)} className="bg-primary text-primary-foreground hover:bg-primary-hover">
+            <Plus className="mr-2 h-4 w-4" /> Nova rezervacija
+          </Button>
+        </div>
       </div>
 
       <div className="rounded-xl border bg-card shadow-card">
