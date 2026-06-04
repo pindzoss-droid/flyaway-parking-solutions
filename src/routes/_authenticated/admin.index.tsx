@@ -272,6 +272,29 @@ function computeStats(reservations: Reservation[], totalSpots: number) {
     { label: "No-show", count: noShowCount, color: "var(--destructive)" },
   ];
 
+  // Monthly revenue — last 12 months (active reservations, by arrival date)
+  const monthlyRevenue = Array.from({ length: 12 }, (_, i) => {
+    const monthDate = startOfMonth(subMonths(now, 11 - i));
+    const monthEnd = endOfMonth(monthDate);
+    let revenue = 0;
+    let count = 0;
+    for (const r of reservations) {
+      if (r.status !== "active") continue;
+      const arr = new Date(r.arrival_at);
+      if (arr >= monthDate && arr <= monthEnd) {
+        revenue += Number(r.estimated_price) || 0;
+        count++;
+      }
+    }
+    return {
+      key: format(monthDate, "yyyy-MM"),
+      label: format(monthDate, "MMM", { locale: bs }),
+      fullLabel: format(monthDate, "LLLL yyyy", { locale: bs }),
+      revenue: Math.round(revenue * 100) / 100,
+      count,
+    };
+  });
+
   upcoming.sort((a, b) => new Date(a.arrival_at).getTime() - new Date(b.arrival_at).getTime());
 
   return {
@@ -284,6 +307,7 @@ function computeStats(reservations: Reservation[], totalSpots: number) {
     noShowCount,
     dailySeries,
     statusSeries,
+    monthlyRevenue,
     upcoming,
   };
 }
