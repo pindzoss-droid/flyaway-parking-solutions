@@ -50,11 +50,11 @@ function AdminSidebar({ onSignOut }: { onSignOut: () => void }) {
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
-        <div className="flex h-[72px] items-center px-4">
-          {state !== "collapsed" && (
+        {state !== "collapsed" && (
+          <div className="flex items-center px-4 py-5">
             <img src={logoAsset.url} alt="PARK & FLY" className="h-8 w-auto max-w-[150px] object-contain" />
-          )}
-        </div>
+          </div>
+        )}
         <SidebarGroup>
           <SidebarGroupLabel>Admin</SidebarGroupLabel>
           <SidebarGroupContent>
