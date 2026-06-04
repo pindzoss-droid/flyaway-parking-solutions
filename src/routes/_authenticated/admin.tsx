@@ -4,6 +4,7 @@ import { SidebarProvider, Sidebar, SidebarContent, SidebarGroup, SidebarGroupCon
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import logoAsset from "@/assets/logo.png.asset.json";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({ meta: [{ title: "Admin — Park&Fly" }, { name: "robots", content: "noindex" }] }),
@@ -31,10 +32,8 @@ function AdminLayout() {
       <div className="min-h-screen flex w-full bg-muted/30">
         <Sidebar collapsible="icon">
           <SidebarContent>
-            <div className="flex items-center gap-1 px-4 py-5">
-              <span className="text-lg font-bold text-sidebar-foreground">PARK</span>
-              <span className="text-lg font-bold text-primary">&</span>
-              <span className="text-lg font-bold text-sidebar-foreground">FLY</span>
+            <div className="flex items-center px-4 py-5">
+              <img src={logoAsset.url} alt="PARK & FLY" className="h-8 w-auto max-w-[150px] object-contain" />
             </div>
             <SidebarGroup>
               <SidebarGroupLabel>Admin</SidebarGroupLabel>
