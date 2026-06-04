@@ -92,9 +92,13 @@ function AuthSync() {
   const router = useRouter();
   const queryClient = useQueryClient();
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
-      router.invalidate();
-      queryClient.invalidateQueries();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      // Only invalidate on actual sign-in/sign-out, not on TOKEN_REFRESHED,
+      // INITIAL_SESSION, USER_UPDATED, or visibility-driven re-checks.
+      if (event === "SIGNED_IN" || event === "SIGNED_OUT") {
+        router.invalidate();
+        queryClient.invalidateQueries();
+      }
     });
     return () => subscription.unsubscribe();
   }, [router, queryClient]);
