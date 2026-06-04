@@ -2,14 +2,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
-import { Loader2, Plus, MoreHorizontal, Trash2, CheckCircle2, XCircle } from "lucide-react";
+import { Loader2, Plus, MoreHorizontal, Trash2, CheckCircle2, XCircle, ChevronDown, Check } from "lucide-react";
 import { listReservations, updateReservationStatus, adminCreateReservation, checkAvailability, getPublicSettings, deleteReservation, type Reservation } from "@/lib/reservations";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -78,6 +77,7 @@ function ReservationsPage() {
   const { data, isLoading } = useQuery({ queryKey: ["admin-reservations"], queryFn: listReservations });
 
   const sorted = useMemo(() => (data ? sortReservations(data, sortKey) : []), [data, sortKey]);
+  const selectedSortLabel = SORT_OPTIONS.find((o) => o.value === sortKey)?.label ?? "Sortiraj";
 
   const updateMut = useMutation({
     mutationFn: (vars: { id: number; status: Reservation["status"] }) => updateReservationStatus(vars.id, vars.status),
@@ -99,16 +99,26 @@ function ReservationsPage() {
           <p className="text-sm text-muted-foreground">Pregled svih rezervacija i ručno dodavanje.</p>
         </div>
         <div className="flex items-center gap-2">
-          <Select value={sortKey} onValueChange={(v) => setSortKey(v as SortKey)}>
-            <SelectTrigger className="h-9 w-[220px]" aria-label="Sortiraj rezervacije">
-              <SelectValue placeholder="Sortiraj" />
-            </SelectTrigger>
-            <SelectContent>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
+                aria-label="Sortiraj rezervacije"
+                className="flex h-9 w-[220px] items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background cursor-pointer focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <span className="truncate">{selectedSortLabel}</span>
+                <ChevronDown className="h-4 w-4 opacity-50" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-[220px]">
               {SORT_OPTIONS.map((o) => (
-                <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                <DropdownMenuItem key={o.value} onClick={() => setSortKey(o.value)} className="justify-between">
+                  <span>{o.label}</span>
+                  {sortKey === o.value && <Check className="h-4 w-4" />}
+                </DropdownMenuItem>
               ))}
-            </SelectContent>
-          </Select>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <Button onClick={() => setAddOpen(true)} className="bg-primary text-primary-foreground hover:bg-primary-hover">
             <Plus className="mr-2 h-4 w-4" /> Nova rezervacija
           </Button>
