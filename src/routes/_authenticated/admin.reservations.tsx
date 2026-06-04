@@ -99,16 +99,16 @@ function ReservationsPage() {
           <p className="text-sm text-muted-foreground">Pregled svih rezervacija i ručno dodavanje.</p>
         </div>
         <div className="flex items-center gap-2">
-          <select
-            value={sortKey}
-            onChange={(e) => setSortKey(e.target.value as SortKey)}
-            className="h-9 w-[200px] rounded-md border border-input bg-background px-3 text-sm shadow-sm outline-none focus:ring-1 focus:ring-ring"
-            aria-label="Sortiraj rezervacije"
-          >
-            {SORT_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>{o.label}</option>
-            ))}
-          </select>
+          <Select value={sortKey} onValueChange={(v) => setSortKey(v as SortKey)}>
+            <SelectTrigger className="h-9 w-[220px]" aria-label="Sortiraj rezervacije">
+              <SelectValue placeholder="Sortiraj" />
+            </SelectTrigger>
+            <SelectContent>
+              {SORT_OPTIONS.map((o) => (
+                <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <Button onClick={() => setAddOpen(true)} className="bg-primary text-primary-foreground hover:bg-primary-hover">
             <Plus className="mr-2 h-4 w-4" /> Nova rezervacija
           </Button>
