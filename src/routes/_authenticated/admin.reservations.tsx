@@ -121,7 +121,7 @@ function ReservationsPage() {
             </DropdownMenuContent>
           </DropdownMenu>
           <Button onClick={() => setAddOpen(true)} className="bg-primary text-primary-foreground hover:bg-primary-hover">
-            <Plus className="mr-2 h-4 w-4" /> Nova rezervacija
+            <Plus className="mr-1 h-4 w-4" /> Nova rezervacija
           </Button>
         </div>
       </div>
