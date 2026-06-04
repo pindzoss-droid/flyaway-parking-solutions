@@ -18,6 +18,7 @@ const items = [
 ];
 
 function AdminLayout() {
+  const { state } = useSidebar();
   const navigate = useNavigate();
   const path = useRouterState({ select: (s) => s.location.pathname });
 
