@@ -13,8 +13,48 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DateTimeField } from "@/components/site/DateTimeField";
 import { toast } from "sonner";
+
+type SortKey =
+  | "arrival_asc"
+  | "name_asc"
+  | "plate_asc"
+  | "departure_asc"
+  | "price_asc"
+  | "price_desc"
+  | "status_asc";
+
+const SORT_OPTIONS: { value: SortKey; label: string }[] = [
+  { value: "arrival_asc", label: "Vrijeme dolaska" },
+  { value: "departure_asc", label: "Vrijeme odlaska" },
+  { value: "name_asc", label: "Osoba (A–Ž)" },
+  { value: "plate_asc", label: "Registracija (A–Ž)" },
+  { value: "price_asc", label: "Cijena (uzlazno)" },
+  { value: "price_desc", label: "Cijena (silazno)" },
+  { value: "status_asc", label: "Status" },
+];
+
+function sortReservations(rows: Reservation[], key: SortKey): Reservation[] {
+  const arr = [...rows];
+  switch (key) {
+    case "arrival_asc":
+      return arr.sort((a, b) => +new Date(a.arrival_at) - +new Date(b.arrival_at));
+    case "departure_asc":
+      return arr.sort((a, b) => +new Date(a.departure_at) - +new Date(b.departure_at));
+    case "name_asc":
+      return arr.sort((a, b) => a.full_name.localeCompare(b.full_name, "bs"));
+    case "plate_asc":
+      return arr.sort((a, b) => a.vehicle_plate.localeCompare(b.vehicle_plate, "bs"));
+    case "price_asc":
+      return arr.sort((a, b) => Number(a.estimated_price) - Number(b.estimated_price));
+    case "price_desc":
+      return arr.sort((a, b) => Number(b.estimated_price) - Number(a.estimated_price));
+    case "status_asc":
+      return arr.sort((a, b) => a.status.localeCompare(b.status));
+  }
+}
 
 export const Route = createFileRoute("/_authenticated/admin/reservations")({
   component: ReservationsPage,
@@ -33,8 +73,11 @@ function StatusBadge({ status }: { status: string }) {
 function ReservationsPage() {
   const qc = useQueryClient();
   const [addOpen, setAddOpen] = useState(false);
+  const [sortKey, setSortKey] = useState<SortKey>("arrival_asc");
 
   const { data, isLoading } = useQuery({ queryKey: ["admin-reservations"], queryFn: listReservations });
+
+  const sorted = useMemo(() => (data ? sortReservations(data, sortKey) : []), [data, sortKey]);
 
   const updateMut = useMutation({
     mutationFn: (vars: { id: number; status: Reservation["status"] }) => updateReservationStatus(vars.id, vars.status),
@@ -50,14 +93,26 @@ function ReservationsPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-3">
         <div>
           <h2 className="text-2xl font-bold">Rezervacije</h2>
           <p className="text-sm text-muted-foreground">Pregled svih rezervacija i ručno dodavanje.</p>
         </div>
-        <Button onClick={() => setAddOpen(true)} className="bg-primary text-primary-foreground hover:bg-primary-hover">
-          <Plus className="mr-2 h-4 w-4" /> Nova rezervacija
-        </Button>
+        <div className="flex items-center gap-2">
+          <Select value={sortKey} onValueChange={(v) => setSortKey(v as SortKey)}>
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Sortiraj po…" />
+            </SelectTrigger>
+            <SelectContent>
+              {SORT_OPTIONS.map((o) => (
+                <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button onClick={() => setAddOpen(true)} className="bg-primary text-primary-foreground hover:bg-primary-hover">
+            <Plus className="mr-2 h-4 w-4" /> Nova rezervacija
+          </Button>
+        </div>
       </div>
 
       <div className="rounded-xl border bg-card shadow-card">
@@ -81,7 +136,7 @@ function ReservationsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data?.map((r) => (
+                {sorted.map((r) => (
                   <TableRow key={r.id}>
                     <TableCell className="pl-6 font-mono text-xs">#{r.id}</TableCell>
                     <TableCell>
@@ -117,7 +172,7 @@ function ReservationsPage() {
                     </TableCell>
                   </TableRow>
                 ))}
-                {(!data || data.length === 0) && (
+                {sorted.length === 0 && (
                   <TableRow><TableCell colSpan={10} className="h-32 text-center text-sm text-muted-foreground">Nema rezervacija.</TableCell></TableRow>
                 )}
               </TableBody>
