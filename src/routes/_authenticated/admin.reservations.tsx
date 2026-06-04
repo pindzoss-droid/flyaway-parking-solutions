@@ -168,6 +168,7 @@ function ReservationsPage() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem onClick={() => updateMut.mutate({ id: r.id, status: "active" })}>Označi kao aktivna</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => updateMut.mutate({ id: r.id, status: "completed" })}>Označi kao završena</DropdownMenuItem>
                           <DropdownMenuItem onClick={() => updateMut.mutate({ id: r.id, status: "cancelled" })}>Otkazana</DropdownMenuItem>
                           <DropdownMenuItem onClick={() => updateMut.mutate({ id: r.id, status: "no_show" })}>Nije se pojavio</DropdownMenuItem>
                           <DropdownMenuItem
