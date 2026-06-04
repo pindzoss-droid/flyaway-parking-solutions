@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { format, subDays, startOfDay, isSameDay, startOfMonth } from "date-fns";
+import { format, subDays, startOfDay, isSameDay, startOfMonth, subMonths, endOfMonth } from "date-fns";
+import { bs } from "date-fns/locale";
 import { Car, CircleParking, Coins, CalendarCheck, CheckCircle2, XCircle, AlertTriangle, Loader2 } from "lucide-react";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar, Cell } from "recharts";
 import { listReservations, getPublicSettings, type Reservation } from "@/lib/reservations";
@@ -113,6 +114,47 @@ function AdminHome() {
             <StatusPill icon={XCircle} label="Otkazane" value={stats.cancelledCount} className="text-muted-foreground" />
             <StatusPill icon={AlertTriangle} label="No-show" value={stats.noShowCount} className="text-destructive" />
           </div>
+        </div>
+      </div>
+
+      {/* Revenue by month */}
+      <div className="rounded-xl border bg-card p-5 shadow-card">
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <h3 className="text-sm font-semibold">Prihodi po mjesecima</h3>
+            <p className="text-xs text-muted-foreground">Zadnjih 12 mjeseci (aktivne rezervacije)</p>
+          </div>
+          <span className="text-xs text-muted-foreground">Ukupno: {stats.revenueTotal.toFixed(2)} {currency}</span>
+        </div>
+        <div className="h-64 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={stats.monthlyRevenue} margin={{ top: 5, right: 10, left: -10, bottom: 0 }}>
+              <defs>
+                <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="var(--primary)" stopOpacity={0.9} />
+                  <stop offset="100%" stopColor="var(--primary)" stopOpacity={0.4} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+              <XAxis dataKey="label" tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" />
+              <YAxis tick={{ fontSize: 11 }} stroke="var(--muted-foreground)" />
+              <Tooltip
+                contentStyle={{ background: "var(--popover)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 }}
+                formatter={(v: number) => [`${v.toFixed(2)} ${currency}`, "Prihod"]}
+                labelFormatter={(l, p) => p?.[0]?.payload?.fullLabel ?? l}
+              />
+              <Bar dataKey="revenue" radius={[6, 6, 0, 0]} fill="url(#revGrad)" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {stats.monthlyRevenue.slice(-4).map((m) => (
+            <div key={m.key} className="rounded-lg border bg-muted/30 p-3">
+              <div className="text-[10px] uppercase tracking-wide text-muted-foreground">{m.fullLabel}</div>
+              <div className="mt-1 text-sm font-semibold">{m.revenue.toFixed(2)} {currency}</div>
+              <div className="text-[11px] text-muted-foreground">{m.count} rez.</div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -230,6 +272,29 @@ function computeStats(reservations: Reservation[], totalSpots: number) {
     { label: "No-show", count: noShowCount, color: "var(--destructive)" },
   ];
 
+  // Monthly revenue — last 12 months (active reservations, by arrival date)
+  const monthlyRevenue = Array.from({ length: 12 }, (_, i) => {
+    const monthDate = startOfMonth(subMonths(now, 11 - i));
+    const monthEnd = endOfMonth(monthDate);
+    let revenue = 0;
+    let count = 0;
+    for (const r of reservations) {
+      if (r.status !== "active") continue;
+      const arr = new Date(r.arrival_at);
+      if (arr >= monthDate && arr <= monthEnd) {
+        revenue += Number(r.estimated_price) || 0;
+        count++;
+      }
+    }
+    return {
+      key: format(monthDate, "yyyy-MM"),
+      label: format(monthDate, "MMM", { locale: bs }),
+      fullLabel: format(monthDate, "LLLL yyyy", { locale: bs }),
+      revenue: Math.round(revenue * 100) / 100,
+      count,
+    };
+  });
+
   upcoming.sort((a, b) => new Date(a.arrival_at).getTime() - new Date(b.arrival_at).getTime());
 
   return {
@@ -242,6 +307,7 @@ function computeStats(reservations: Reservation[], totalSpots: number) {
     noShowCount,
     dailySeries,
     statusSeries,
+    monthlyRevenue,
     upcoming,
   };
 }
