@@ -33,9 +33,11 @@ function AdminLayout() {
       <div className="min-h-screen flex w-full bg-muted/30">
         <Sidebar collapsible="icon">
           <SidebarContent>
-            <div className="flex items-center px-4 py-5">
-              <img src={logoAsset.url} alt="PARK & FLY" className="h-8 w-auto max-w-[150px] object-contain" />
-            </div>
+            {state !== "collapsed" && (
+              <div className="flex items-center px-4 py-5">
+                <img src={logoAsset.url} alt="PARK & FLY" className="h-8 w-auto max-w-[150px] object-contain" />
+              </div>
+            )}
             <SidebarGroup>
               <SidebarGroupLabel>Admin</SidebarGroupLabel>
               <SidebarGroupContent>
