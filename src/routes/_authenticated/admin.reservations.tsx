@@ -103,7 +103,7 @@ function ReservationsPage() {
             <SelectTrigger className="h-9 w-[220px]" aria-label="Sortiraj rezervacije">
               <SelectValue placeholder="Sortiraj" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent position="item-aligned" className="w-[220px]">
               {SORT_OPTIONS.map((o) => (
                 <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
               ))}
