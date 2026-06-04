@@ -284,7 +284,7 @@ function Footer() {
 
       <div className="container-park py-16">
         {/* CTA strip — full width */}
-        <div className="mb-14 rounded-2xl border border-white/10 bg-white/[0.03] p-8 text-center shadow-hero">
+        <div className="mb-24 rounded-2xl border border-white/10 bg-white/[0.03] p-8 text-center shadow-hero">
           <h3 className="text-3xl font-bold sm:text-4xl">{t("footer.tagline")}</h3>
           <p className="mt-2 text-navy-foreground/70">Rezerviši online — sigurno mjesto za tvoj auto dok ti letiš.</p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
