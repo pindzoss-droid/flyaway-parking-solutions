@@ -8,8 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useI18n } from "@/lib/i18n";
 import droneAsset from "@/assets/drone-aerial.png.asset.json";
+import rentcarBgAsset from "@/assets/rentcar-bg.png.asset.json";
 
 const droneImg = droneAsset.url;
+const rentcarBg = rentcarBgAsset.url;
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -127,17 +129,30 @@ function DroneShowcase() {
 }
 
 function RentACarBanner() {
-  const { t } = useI18n();
   return (
     <section className="py-16">
       <div className="container-park">
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-hero p-10 text-center text-navy-foreground sm:p-12" style={{ minHeight: 240 }}>
+        <div
+          className="relative overflow-hidden rounded-2xl p-10 text-center text-white sm:p-12"
+          style={{
+            minHeight: 280,
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url(${rentcarBg})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
           <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center gap-5">
-            <h3 className="text-3xl font-bold sm:text-4xl">{t("rentcar.title")}</h3>
-            <p className="max-w-xl text-navy-foreground/85">{t("rentcar.desc")}</p>
-            <Button className="bg-primary text-primary-foreground hover:bg-primary-hover shadow-cta">{t("rentcar.cta")}</Button>
+            <h3 className="text-3xl font-bold sm:text-4xl">Rent a Car i usluge prevoza</h3>
+            <p className="max-w-xl text-white/85">Rezerviši vozilo ili transfer u 2 jednostavna koraka</p>
+            <Button
+              className="h-12 px-8 text-base font-semibold text-white shadow-cta"
+              style={{ backgroundColor: "#BFA37C" }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#AC8E68")}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#BFA37C")}
+            >
+              Saznaj više
+            </Button>
           </div>
-          <Car className="absolute -right-6 -bottom-6 h-48 w-48 text-white/5" />
         </div>
       </div>
     </section>
