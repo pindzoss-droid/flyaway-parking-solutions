@@ -13,8 +13,48 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DateTimeField } from "@/components/site/DateTimeField";
 import { toast } from "sonner";
+
+type SortKey =
+  | "arrival_asc"
+  | "name_asc"
+  | "plate_asc"
+  | "departure_asc"
+  | "price_asc"
+  | "price_desc"
+  | "status_asc";
+
+const SORT_OPTIONS: { value: SortKey; label: string }[] = [
+  { value: "arrival_asc", label: "Vrijeme dolaska" },
+  { value: "departure_asc", label: "Vrijeme odlaska" },
+  { value: "name_asc", label: "Osoba (A–Ž)" },
+  { value: "plate_asc", label: "Registracija (A–Ž)" },
+  { value: "price_asc", label: "Cijena (uzlazno)" },
+  { value: "price_desc", label: "Cijena (silazno)" },
+  { value: "status_asc", label: "Status" },
+];
+
+function sortReservations(rows: Reservation[], key: SortKey): Reservation[] {
+  const arr = [...rows];
+  switch (key) {
+    case "arrival_asc":
+      return arr.sort((a, b) => +new Date(a.arrival_at) - +new Date(b.arrival_at));
+    case "departure_asc":
+      return arr.sort((a, b) => +new Date(a.departure_at) - +new Date(b.departure_at));
+    case "name_asc":
+      return arr.sort((a, b) => a.full_name.localeCompare(b.full_name, "bs"));
+    case "plate_asc":
+      return arr.sort((a, b) => a.vehicle_plate.localeCompare(b.vehicle_plate, "bs"));
+    case "price_asc":
+      return arr.sort((a, b) => Number(a.estimated_price) - Number(b.estimated_price));
+    case "price_desc":
+      return arr.sort((a, b) => Number(b.estimated_price) - Number(a.estimated_price));
+    case "status_asc":
+      return arr.sort((a, b) => a.status.localeCompare(b.status));
+  }
+}
 
 export const Route = createFileRoute("/_authenticated/admin/reservations")({
   component: ReservationsPage,
