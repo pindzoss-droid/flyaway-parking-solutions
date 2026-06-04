@@ -136,7 +136,7 @@ function ReservationsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data?.map((r) => (
+                {sorted.map((r) => (
                   <TableRow key={r.id}>
                     <TableCell className="pl-6 font-mono text-xs">#{r.id}</TableCell>
                     <TableCell>
