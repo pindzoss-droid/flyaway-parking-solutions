@@ -133,7 +133,7 @@ function RentACarBanner() {
     <section className="py-16">
       <div className="container-park">
         <div
-          className="relative overflow-hidden rounded-2xl p-10 text-center text-white sm:p-12"
+          className="relative flex items-center justify-center overflow-hidden rounded-2xl p-10 text-center text-white sm:p-12"
           style={{
             minHeight: 280,
             backgroundImage: `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url(${rentcarBg})`,
