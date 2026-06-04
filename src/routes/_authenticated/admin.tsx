@@ -18,9 +18,7 @@ const items = [
 ];
 
 function AdminLayout() {
-  const { state } = useSidebar();
   const navigate = useNavigate();
-  const path = useRouterState({ select: (s) => s.location.pathname });
 
   async function signOut() {
     await supabase.auth.signOut();
@@ -31,45 +29,7 @@ function AdminLayout() {
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-muted/30">
-        <Sidebar collapsible="icon">
-          <SidebarContent>
-            {state !== "collapsed" && (
-              <div className="flex items-center px-4 py-5">
-                <img src={logoAsset.url} alt="PARK & FLY" className="h-8 w-auto max-w-[150px] object-contain" />
-              </div>
-            )}
-            <SidebarGroup>
-              <SidebarGroupLabel>Admin</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {items.map((it) => (
-                    <SidebarMenuItem key={it.url}>
-                      <SidebarMenuButton asChild isActive={it.exact ? path === it.url : path === it.url}>
-                        <Link to={it.url} className="flex items-center gap-2">
-                          <it.icon className="h-4 w-4" />
-                          <span>{it.title}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
-                      <Link to="/" className="flex items-center gap-2">
-                        <Home className="h-4 w-4" />
-                        <span>Web stranica</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          </SidebarContent>
-          <SidebarFooter>
-            <Button variant="ghost" size="sm" onClick={signOut} className="w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent">
-              <LogOut className="mr-2 h-4 w-4" /> Odjava
-            </Button>
-          </SidebarFooter>
-        </Sidebar>
+        <AdminSidebar onSignOut={signOut} />
 
         <div className="flex-1 flex flex-col">
           <header className="h-14 flex items-center border-b bg-background px-4 gap-2">
@@ -80,5 +40,52 @@ function AdminLayout() {
         </div>
       </div>
     </SidebarProvider>
+  );
+}
+
+function AdminSidebar({ onSignOut }: { onSignOut: () => void }) {
+  const { state } = useSidebar();
+  const path = useRouterState({ select: (s) => s.location.pathname });
+
+  return (
+    <Sidebar collapsible="icon">
+      <SidebarContent>
+        {state !== "collapsed" && (
+          <div className="flex items-center px-4 py-5">
+            <img src={logoAsset.url} alt="PARK & FLY" className="h-8 w-auto max-w-[150px] object-contain" />
+          </div>
+        )}
+        <SidebarGroup>
+          <SidebarGroupLabel>Admin</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {items.map((it) => (
+                <SidebarMenuItem key={it.url}>
+                  <SidebarMenuButton asChild isActive={it.exact ? path === it.url : path === it.url}>
+                    <Link to={it.url} className="flex items-center gap-2">
+                      <it.icon className="h-4 w-4" />
+                      <span>{it.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/" className="flex items-center gap-2">
+                    <Home className="h-4 w-4" />
+                    <span>Web stranica</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+      <SidebarFooter>
+        <Button variant="ghost" size="sm" onClick={onSignOut} className="w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent">
+          <LogOut className="mr-2 h-4 w-4" /> Odjava
+        </Button>
+      </SidebarFooter>
+    </Sidebar>
   );
 }
