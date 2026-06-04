@@ -13,7 +13,7 @@ export type Reservation = {
   departure_at: string;
   destination: string | null;
   note: string | null;
-  status: "active" | "cancelled" | "no_show";
+  status: "active" | "cancelled" | "no_show" | "completed";
   estimated_price: number;
   source: string;
   needs_airport_transfer: boolean;
