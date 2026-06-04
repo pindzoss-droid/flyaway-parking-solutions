@@ -13,7 +13,7 @@ export type Reservation = {
   departure_at: string;
   destination: string | null;
   note: string | null;
-  status: "active" | "cancelled" | "no_show";
+  status: "active" | "cancelled" | "no_show" | "completed";
   estimated_price: number;
   source: string;
   needs_airport_transfer: boolean;
@@ -73,6 +73,13 @@ export async function createReservation(input: NewReservationInput): Promise<voi
 
 // ============ Admin (RLS enforces admin role) ============
 export async function listReservations(): Promise<Reservation[]> {
+  // Auto-complete: any active reservation whose departure has passed becomes "completed"
+  await supabase
+    .from("reservations")
+    .update({ status: "completed" })
+    .eq("status", "active")
+    .lt("departure_at", new Date().toISOString());
+
   const { data, error } = await supabase
     .from("reservations")
     .select("*")
