@@ -172,7 +172,7 @@ function ReservationsPage() {
                     </TableCell>
                   </TableRow>
                 ))}
-                {(!data || data.length === 0) && (
+                {sorted.length === 0 && (
                   <TableRow><TableCell colSpan={10} className="h-32 text-center text-sm text-muted-foreground">Nema rezervacija.</TableCell></TableRow>
                 )}
               </TableBody>
