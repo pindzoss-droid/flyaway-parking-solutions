@@ -8,8 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useI18n } from "@/lib/i18n";
 import droneAsset from "@/assets/drone-aerial.png.asset.json";
+import rentcarBgAsset from "@/assets/rentcar-bg.png.asset.json";
 
 const droneImg = droneAsset.url;
+const rentcarBg = rentcarBgAsset.url;
 
 export const Route = createFileRoute("/")({
   head: () => ({
