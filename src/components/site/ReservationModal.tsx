@@ -8,9 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { DateTimeField } from "@/components/site/DateTimeField";
-import { checkAvailability, createReservation, getPublicSettings } from "@/lib/reservations";
+import { checkAvailability, computeQuote, createReservation, getPricingTiers } from "@/lib/reservations";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { Sparkles } from "lucide-react";
 
 type Props = { open: boolean; onOpenChange: (o: boolean) => void };
 
@@ -31,7 +32,7 @@ function diffDays(a: string | null, b: string | null) {
 export function ReservationModal({ open, onOpenChange }: Props) {
   const { t } = useI18n();
 
-  const { data: settings } = useQuery({ queryKey: ["public-settings"], queryFn: getPublicSettings });
+  const { data: tiers } = useQuery({ queryKey: ["pricing-tiers-public"], queryFn: getPricingTiers });
 
   const today = useMemo(() => new Date(new Date().setHours(0, 0, 0, 0)), []);
   const [arrivalDate, setArrivalDate] = useState<Date | undefined>(today);
@@ -54,7 +55,7 @@ export function ReservationModal({ open, onOpenChange }: Props) {
   const arrivalISO = useMemo(() => combine(arrivalDate, arrivalTime), [arrivalDate, arrivalTime]);
   const departureISO = useMemo(() => combine(departureDate, departureTime), [departureDate, departureTime]);
   const days = diffDays(arrivalISO, departureISO);
-  const price = settings ? +(days * Number(settings.price_per_day)).toFixed(2) : 0;
+  const quote = useMemo(() => computeQuote(days || 1, tiers ?? []), [days, tiers]);
 
   useEffect(() => {
     if (!arrivalISO || !departureISO) { setAvailability(null); return; }
@@ -81,7 +82,7 @@ export function ReservationModal({ open, onOpenChange }: Props) {
         arrival_at: arrivalISO, departure_at: departureISO,
         destination: destination || null, needs_airport_transfer: transfer, note: note || null,
       });
-      toast.success(`${t("form.success")} (~${price} ${settings?.currency ?? "BAM"})`);
+      toast.success(`${t("form.success")} (~${quote.total} BAM)`);
       onOpenChange(false);
       setFullName(""); setPlate(""); setEmail(""); setPhone(""); setDestination(""); setNote("");
       setArrivalDate(today); setDepartureDate(undefined);
@@ -140,10 +141,21 @@ export function ReservationModal({ open, onOpenChange }: Props) {
               {!checking && availability && !availability.blocked && !availability.ok && (
                 <span className="flex items-center gap-2 text-destructive"><XCircle className="h-4 w-4" />{t("form.unavailable")}</span>
               )}
-              {!checking && availability?.ok && arrivalISO && departureISO && settings && (
-                <div className="mt-2 flex items-center justify-between border-t pt-2">
-                  <span className="text-muted-foreground">{t("form.estimate")} · {days} {t("form.days")}</span>
-                  <span className="text-lg font-bold text-primary">{price} {settings.currency}</span>
+              {!checking && availability?.ok && arrivalISO && departureISO && tiers && (
+                <div className="mt-2 space-y-2 border-t pt-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">{t("form.estimate")} · {days} {t("form.days")}</span>
+                    <span className="text-lg font-bold text-primary">{quote.total} BAM</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    Tarifa: <span className="font-medium text-foreground">{quote.rate} BAM/dan</span>
+                  </div>
+                  {quote.saved > 0 && (
+                    <div className="flex items-center gap-2 rounded-md bg-success/10 px-2 py-1.5 text-xs font-medium text-success">
+                      <Sparkles className="h-3.5 w-3.5" />
+                      Štedite {quote.saved} BAM zahvaljujući popustu za duži boravak!
+                    </div>
+                  )}
                 </div>
               )}
             </div>

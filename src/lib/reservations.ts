@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 // ============ Public types ============
 export type Availability = { available_spots: number; total_spots: number; is_blocked: boolean };
 export type Settings = { total_spots: number; price_per_day: number; currency: string };
+export type PricingTier = { tier_index: number; day_to: number | null; price_per_day: number };
 export type Reservation = {
   id: number;
   full_name: string;
@@ -125,10 +126,10 @@ export async function getAdminSettings() {
   return { settings, blocked: (blocked ?? []) as BlockedPeriod[] };
 }
 
-export async function updateSettings(input: { total_spots: number; price_per_day: number; currency: string }) {
+export async function updateSettings(input: { total_spots: number }) {
   const { error } = await supabase
     .from("parking_settings")
-    .update({ total_spots: input.total_spots, price_per_day: input.price_per_day, currency: input.currency })
+    .update({ total_spots: input.total_spots })
     .eq("id", 1);
   if (error) throw new Error(error.message);
 }
@@ -141,4 +142,49 @@ export async function addBlockedPeriod(input: { start_date: string; end_date: st
 export async function removeBlockedPeriod(id: string) {
   const { error } = await supabase.from("blocked_periods").delete().eq("id", id);
   if (error) throw new Error(error.message);
+}
+
+// ============ Pricing tiers ============
+export async function getPricingTiers(): Promise<PricingTier[]> {
+  const { data, error } = await supabase
+    .from("pricing_tiers")
+    .select("tier_index, day_to, price_per_day")
+    .order("tier_index", { ascending: true });
+  if (error) throw new Error(error.message);
+  return (data ?? []).map((t) => ({ ...t, price_per_day: Number(t.price_per_day) })) as PricingTier[];
+}
+
+export async function updatePricingTiers(tiers: { tier_index: number; day_to: number | null; price_per_day: number }[]) {
+  // Update each tier individually
+  for (const t of tiers) {
+    const { error } = await supabase
+      .from("pricing_tiers")
+      .update({ day_to: t.day_to, price_per_day: t.price_per_day })
+      .eq("tier_index", t.tier_index);
+    if (error) throw new Error(error.message);
+  }
+}
+
+/** Tier descriptor for a given total day count. */
+export function tierForDays(days: number, tiers: PricingTier[]): PricingTier | null {
+  if (tiers.length === 0) return null;
+  const t1 = tiers.find((t) => t.tier_index === 1);
+  const t2 = tiers.find((t) => t.tier_index === 2);
+  const t3 = tiers.find((t) => t.tier_index === 3);
+  if (!t1 || !t2 || !t3) return null;
+  if (days <= (t1.day_to ?? 10)) return t1;
+  if (days <= (t2.day_to ?? 20)) return t2;
+  return t3;
+}
+
+/** Compute total price + per-day rate + savings vs tier 1 rate. */
+export function computeQuote(days: number, tiers: PricingTier[]): { days: number; rate: number; total: number; baseRate: number; saved: number; tier: PricingTier | null } {
+  const d = Math.max(1, days);
+  const tier = tierForDays(d, tiers);
+  const rate = tier ? Number(tier.price_per_day) : 0;
+  const baseRate = Number(tiers.find((t) => t.tier_index === 1)?.price_per_day ?? rate);
+  const total = +(d * rate).toFixed(2);
+  const baseTotal = +(d * baseRate).toFixed(2);
+  const saved = Math.max(0, +(baseTotal - total).toFixed(2));
+  return { days: d, rate, total, baseRate, saved, tier };
 }

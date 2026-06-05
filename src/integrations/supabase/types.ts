@@ -62,6 +62,27 @@ export type Database = {
         }
         Relationships: []
       }
+      pricing_tiers: {
+        Row: {
+          day_to: number | null
+          price_per_day: number
+          tier_index: number
+          updated_at: string
+        }
+        Insert: {
+          day_to?: number | null
+          price_per_day: number
+          tier_index: number
+          updated_at?: string
+        }
+        Update: {
+          day_to?: number | null
+          price_per_day?: number
+          tier_index?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       reservations: {
         Row: {
           arrival_at: string
@@ -142,6 +163,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_price_for_days: { Args: { _days: number }; Returns: number }
       check_availability: {
         Args: { _arrival: string; _departure: string; _exclude_id?: number }
         Returns: {

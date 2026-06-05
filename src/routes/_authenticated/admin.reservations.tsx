@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
 import { Loader2, Plus, MoreHorizontal, Trash2, CheckCircle2, XCircle, ChevronDown, Check } from "lucide-react";
-import { listReservations, updateReservationStatus, adminCreateReservation, checkAvailability, getPublicSettings, deleteReservation, type Reservation } from "@/lib/reservations";
+import { listReservations, updateReservationStatus, adminCreateReservation, checkAvailability, getPricingTiers, computeQuote, deleteReservation, type Reservation } from "@/lib/reservations";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -214,7 +214,7 @@ function diffDays(a: string | null, b: string | null) {
 
 function AddReservationDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {
   const qc = useQueryClient();
-  const { data: settings } = useQuery({ queryKey: ["public-settings"], queryFn: getPublicSettings });
+  const { data: tiers } = useQuery({ queryKey: ["pricing-tiers-public"], queryFn: getPricingTiers });
 
   const today = useMemo(() => new Date(new Date().setHours(0, 0, 0, 0)), []);
   const [arrivalDate, setArrivalDate] = useState<Date | undefined>(today);
@@ -237,7 +237,7 @@ function AddReservationDialog({ open, onOpenChange }: { open: boolean; onOpenCha
   const arrivalISO = useMemo(() => combine(arrivalDate, arrivalTime), [arrivalDate, arrivalTime]);
   const departureISO = useMemo(() => combine(departureDate, departureTime), [departureDate, departureTime]);
   const days = diffDays(arrivalISO, departureISO);
-  const price = settings ? +(days * Number(settings.price_per_day)).toFixed(2) : 0;
+  const quote = useMemo(() => computeQuote(days || 1, tiers ?? []), [days, tiers]);
 
   useEffect(() => {
     if (!arrivalISO || !departureISO) { setAvailability(null); return; }
@@ -264,7 +264,7 @@ function AddReservationDialog({ open, onOpenChange }: { open: boolean; onOpenCha
         arrival_at: arrivalISO, departure_at: departureISO,
         destination: destination || null, needs_airport_transfer: transfer, note: note || null,
       });
-      toast.success(`Rezervacija dodana (~${price} ${settings?.currency ?? "BAM"})`);
+      toast.success(`Rezervacija dodana (~${quote.total} BAM)`);
       qc.invalidateQueries({ queryKey: ["admin-reservations"] });
       onOpenChange(false);
       setFullName(""); setPlate(""); setEmail(""); setPhone(""); setDestination(""); setNote("");
@@ -323,10 +323,13 @@ function AddReservationDialog({ open, onOpenChange }: { open: boolean; onOpenCha
               {!checking && availability && !availability.blocked && !availability.ok && (
                 <span className="flex items-center gap-2 text-destructive"><XCircle className="h-4 w-4" />Nedostupno u odabranom periodu</span>
               )}
-              {!checking && availability?.ok && arrivalISO && departureISO && settings && (
-                <div className="mt-2 flex items-center justify-between border-t pt-2">
-                  <span className="text-muted-foreground">Procjena cijene · {days} dana</span>
-                  <span className="text-lg font-bold text-primary">{price} {settings.currency}</span>
+              {!checking && availability?.ok && arrivalISO && departureISO && tiers && (
+                <div className="mt-2 space-y-1 border-t pt-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Procjena cijene · {days} dana</span>
+                    <span className="text-lg font-bold text-primary">{quote.total} BAM</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground">Tarifa: {quote.rate} BAM/dan{quote.saved > 0 ? ` · Ušteda ${quote.saved} BAM` : ""}</div>
                 </div>
               )}
             </div>
