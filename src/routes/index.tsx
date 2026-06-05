@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Shield, Plane, Bus, Car, MapPin, Phone, Mail, Star, PlayCircle, Clock, CreditCard, ShieldCheck } from "lucide-react";
 import { Navbar } from "@/components/site/Navbar";
 import { ReservationModal } from "@/components/site/ReservationModal";
+import { PricingPackages } from "@/components/site/PricingPackages";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useI18n } from "@/lib/i18n";
