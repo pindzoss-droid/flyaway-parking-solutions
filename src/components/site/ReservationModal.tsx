@@ -8,9 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { DateTimeField } from "@/components/site/DateTimeField";
-import { checkAvailability, createReservation, getPublicSettings } from "@/lib/reservations";
+import { checkAvailability, computeQuote, createReservation, getPricingTiers } from "@/lib/reservations";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { Sparkles } from "lucide-react";
 
 type Props = { open: boolean; onOpenChange: (o: boolean) => void };
 
