@@ -82,7 +82,7 @@ export function ReservationModal({ open, onOpenChange }: Props) {
         arrival_at: arrivalISO, departure_at: departureISO,
         destination: destination || null, needs_airport_transfer: transfer, note: note || null,
       });
-      toast.success(`${t("form.success")} (~${price} ${settings?.currency ?? "BAM"})`);
+      toast.success(`${t("form.success")} (~${quote.total} BAM)`);
       onOpenChange(false);
       setFullName(""); setPlate(""); setEmail(""); setPhone(""); setDestination(""); setNote("");
       setArrivalDate(today); setDepartureDate(undefined);
