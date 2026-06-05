@@ -160,14 +160,24 @@ function SettingsPage() {
       <Card>
         <CardHeader>
           <CardTitle>Parametri parkinga</CardTitle>
-          <CardDescription>Broj parking mjesta.</CardDescription>
+          <CardDescription>Ukupni kapacitet parking mjesta.</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-1.5 max-w-xs">
-            <Label>Ukupno mjesta</Label>
-            <Input type="number" min={1} value={totalSpots} onChange={(e) => setTotalSpots(Number(e.target.value))} />
+        <CardContent>
+          <div className="flex flex-col gap-4 rounded-lg border bg-muted/30 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-4">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/15 text-primary">
+                <span className="text-2xl font-bold">{totalSpots}</span>
+              </div>
+              <div>
+                <div className="text-sm font-semibold">Ukupno mjesta</div>
+                <div className="text-xs text-muted-foreground">Broj mjesta dostupnih za rezervaciju</div>
+              </div>
+            </div>
+            <div className="sm:w-40">
+              <Stepper value={totalSpots} min={1} onChange={setTotalSpots} />
+            </div>
           </div>
-          <Button onClick={() => saveMut.mutate()} disabled={saveMut.isPending} className="bg-primary text-primary-foreground hover:bg-primary-hover">
+          <Button onClick={() => saveMut.mutate()} disabled={saveMut.isPending} className="mt-4 bg-primary text-primary-foreground hover:bg-primary-hover">
             {saveMut.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Sačuvaj postavke"}
           </Button>
         </CardContent>
@@ -264,7 +274,7 @@ function Stepper({ value, min = 0, step = 1, onChange }: { value: number; min?: 
         min={min}
         step={step}
         onChange={(e) => onChange(Math.max(min, Number(e.target.value) || min))}
-        className="h-9 rounded-none border-x-0 text-center"
+        className="no-spin h-9 rounded-none border-x-0 text-center"
       />
       <Button type="button" variant="outline" size="icon" className="h-9 w-9 rounded-l-none" onClick={() => onChange(value + step)}>
         <Plus className="h-4 w-4" />
