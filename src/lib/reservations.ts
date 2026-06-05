@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 // ============ Public types ============
 export type Availability = { available_spots: number; total_spots: number; is_blocked: boolean };
 export type Settings = { total_spots: number; price_per_day: number; currency: string };
+export type PricingTier = { tier_index: number; day_to: number | null; price_per_day: number };
 export type Reservation = {
   id: number;
   full_name: string;
