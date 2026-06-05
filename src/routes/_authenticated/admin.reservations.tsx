@@ -214,7 +214,7 @@ function diffDays(a: string | null, b: string | null) {
 
 function AddReservationDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {
   const qc = useQueryClient();
-  const { data: settings } = useQuery({ queryKey: ["public-settings"], queryFn: getPublicSettings });
+  const { data: tiers } = useQuery({ queryKey: ["pricing-tiers-public"], queryFn: getPricingTiers });
 
   const today = useMemo(() => new Date(new Date().setHours(0, 0, 0, 0)), []);
   const [arrivalDate, setArrivalDate] = useState<Date | undefined>(today);
