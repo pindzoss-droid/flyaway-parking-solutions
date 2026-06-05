@@ -264,7 +264,7 @@ function AddReservationDialog({ open, onOpenChange }: { open: boolean; onOpenCha
         arrival_at: arrivalISO, departure_at: departureISO,
         destination: destination || null, needs_airport_transfer: transfer, note: note || null,
       });
-      toast.success(`Rezervacija dodana (~${price} ${settings?.currency ?? "BAM"})`);
+      toast.success(`Rezervacija dodana (~${quote.total} BAM)`);
       qc.invalidateQueries({ queryKey: ["admin-reservations"] });
       onOpenChange(false);
       setFullName(""); setPlate(""); setEmail(""); setPhone(""); setDestination(""); setNote("");
