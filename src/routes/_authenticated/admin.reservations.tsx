@@ -323,10 +323,13 @@ function AddReservationDialog({ open, onOpenChange }: { open: boolean; onOpenCha
               {!checking && availability && !availability.blocked && !availability.ok && (
                 <span className="flex items-center gap-2 text-destructive"><XCircle className="h-4 w-4" />Nedostupno u odabranom periodu</span>
               )}
-              {!checking && availability?.ok && arrivalISO && departureISO && settings && (
-                <div className="mt-2 flex items-center justify-between border-t pt-2">
-                  <span className="text-muted-foreground">Procjena cijene · {days} dana</span>
-                  <span className="text-lg font-bold text-primary">{price} {settings.currency}</span>
+              {!checking && availability?.ok && arrivalISO && departureISO && tiers && (
+                <div className="mt-2 space-y-1 border-t pt-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Procjena cijene · {days} dana</span>
+                    <span className="text-lg font-bold text-primary">{quote.total} BAM</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground">Tarifa: {quote.rate} BAM/dan{quote.saved > 0 ? ` · Ušteda ${quote.saved} BAM` : ""}</div>
                 </div>
               )}
             </div>
