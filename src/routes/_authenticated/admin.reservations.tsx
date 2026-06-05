@@ -237,7 +237,7 @@ function AddReservationDialog({ open, onOpenChange }: { open: boolean; onOpenCha
   const arrivalISO = useMemo(() => combine(arrivalDate, arrivalTime), [arrivalDate, arrivalTime]);
   const departureISO = useMemo(() => combine(departureDate, departureTime), [departureDate, departureTime]);
   const days = diffDays(arrivalISO, departureISO);
-  const price = settings ? +(days * Number(settings.price_per_day)).toFixed(2) : 0;
+  const quote = useMemo(() => computeQuote(days || 1, tiers ?? []), [days, tiers]);
 
   useEffect(() => {
     if (!arrivalISO || !departureISO) { setAvailability(null); return; }
