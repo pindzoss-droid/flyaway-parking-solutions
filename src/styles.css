@@ -145,4 +145,7 @@
   .shadow-card { box-shadow: var(--shadow-card); }
   .shadow-cta { box-shadow: var(--shadow-cta); }
   .container-park { @apply mx-auto w-full max-w-[1180px] px-4 sm:px-6; }
+  .no-spin::-webkit-outer-spin-button,
+  .no-spin::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .no-spin { -moz-appearance: textfield; appearance: textfield; }
 }
