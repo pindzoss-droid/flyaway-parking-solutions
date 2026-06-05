@@ -141,10 +141,21 @@ export function ReservationModal({ open, onOpenChange }: Props) {
               {!checking && availability && !availability.blocked && !availability.ok && (
                 <span className="flex items-center gap-2 text-destructive"><XCircle className="h-4 w-4" />{t("form.unavailable")}</span>
               )}
-              {!checking && availability?.ok && arrivalISO && departureISO && settings && (
-                <div className="mt-2 flex items-center justify-between border-t pt-2">
-                  <span className="text-muted-foreground">{t("form.estimate")} · {days} {t("form.days")}</span>
-                  <span className="text-lg font-bold text-primary">{price} {settings.currency}</span>
+              {!checking && availability?.ok && arrivalISO && departureISO && tiers && (
+                <div className="mt-2 space-y-2 border-t pt-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">{t("form.estimate")} · {days} {t("form.days")}</span>
+                    <span className="text-lg font-bold text-primary">{quote.total} BAM</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    Tarifa: <span className="font-medium text-foreground">{quote.rate} BAM/dan</span>
+                  </div>
+                  {quote.saved > 0 && (
+                    <div className="flex items-center gap-2 rounded-md bg-success/10 px-2 py-1.5 text-xs font-medium text-success">
+                      <Sparkles className="h-3.5 w-3.5" />
+                      Štedite {quote.saved} BAM zahvaljujući popustu za duži boravak!
+                    </div>
+                  )}
                 </div>
               )}
             </div>
