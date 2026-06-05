@@ -264,7 +264,7 @@ function Stepper({ value, min = 0, step = 1, onChange }: { value: number; min?: 
         min={min}
         step={step}
         onChange={(e) => onChange(Math.max(min, Number(e.target.value) || min))}
-        className="h-9 rounded-none border-x-0 text-center"
+        className="no-spin h-9 rounded-none border-x-0 text-center"
       />
       <Button type="button" variant="outline" size="icon" className="h-9 w-9 rounded-l-none" onClick={() => onChange(value + step)}>
         <Plus className="h-4 w-4" />
