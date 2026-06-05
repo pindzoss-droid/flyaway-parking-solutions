@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
 import { Loader2, Plus, MoreHorizontal, Trash2, CheckCircle2, XCircle, ChevronDown, Check } from "lucide-react";
-import { listReservations, updateReservationStatus, adminCreateReservation, checkAvailability, getPublicSettings, deleteReservation, type Reservation } from "@/lib/reservations";
+import { listReservations, updateReservationStatus, adminCreateReservation, checkAvailability, getPricingTiers, computeQuote, deleteReservation, type Reservation } from "@/lib/reservations";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
