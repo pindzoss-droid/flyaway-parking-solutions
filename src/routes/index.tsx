@@ -34,6 +34,7 @@ function Index() {
       <Hero onBook={() => setOpen(true)} />
       <Why />
       <DroneShowcase />
+      <PricingPackages onBook={() => setOpen(true)} />
       <RentACarBanner />
       <Faq />
       <Location />
