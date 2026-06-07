@@ -63,7 +63,7 @@ export function Navbar({ onBook }: { onBook: () => void }) {
 
         <div className="hidden items-center gap-2 lg:flex">
           <a
-            href="https://wa.me/"
+            href="https://wa.me/387603513513"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="WhatsApp"
@@ -72,7 +72,7 @@ export function Navbar({ onBook }: { onBook: () => void }) {
             <WhatsAppIcon className="h-4.5 w-4.5" />
           </a>
           <a
-            href="viber://chat?number=%2B387"
+            href="viber://chat?number=%2B38760351351"
             aria-label="Viber"
             className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#7360F2] text-white shadow-sm transition hover:scale-105"
           >
@@ -108,8 +108,8 @@ export function Navbar({ onBook }: { onBook: () => void }) {
               </a>
             ))}
             <div className="flex items-center gap-2 pt-2">
-              <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#25D366] text-white"><WhatsAppIcon className="h-4 w-4" /></a>
-              <a href="viber://chat?number=%2B387" aria-label="Viber" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#7360F2] text-white"><ViberIcon className="h-4 w-4" /></a>
+              <a href="https://wa.me/387603513513" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#25D366] text-white"><WhatsAppIcon className="h-4 w-4" /></a>
+              <a href="viber://chat?number=%2B38760351351" aria-label="Viber" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#7360F2] text-white"><ViberIcon className="h-4 w-4" /></a>
               {(["bs", "en"] as const).map((l) => (
                 <button key={l} onClick={() => setLang(l)} className={`rounded-full px-3 py-1 text-xs font-semibold uppercase ${lang === l ? "bg-primary text-primary-foreground" : "bg-white/10 text-navy-foreground/70"}`}>{l}</button>
               ))}
