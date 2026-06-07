@@ -40,8 +40,8 @@ function Index() {
       <RentACarBanner />
       <Faq />
       <Location />
-      <VideoSection />
-      <Reviews />
+      {/* <VideoSection /> */}
+      {/* <Reviews /> */}
       <Footer />
       <ReservationModal open={open} onOpenChange={setOpen} />
     </div>
