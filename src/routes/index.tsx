@@ -10,8 +10,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { useI18n } from "@/lib/i18n";
 import droneAsset from "@/assets/drone-aerial.png.asset.json";
 import rentcarBgAsset from "@/assets/rentcar-bg.png.asset.json";
+import aerialMapAsset from "@/assets/aerial-map.png.asset.json";
 
 const droneImg = droneAsset.url;
+const aerialMapImg = aerialMapAsset.url;
 const rentcarBg = rentcarBgAsset.url;
 
 export const Route = createFileRoute("/")({
@@ -109,23 +111,9 @@ function Why() {
 }
 
 function DroneShowcase() {
-  const { t } = useI18n();
   return (
-    <section className="bg-muted/40 py-24">
-      <div className="container-park grid items-center gap-16 lg:grid-cols-[65fr_35fr]">
-        <div className="order-2 overflow-hidden rounded-2xl shadow-hero lg:order-1">
-          <img src={droneImg} alt="Park&Fly aerial view" className="h-[520px] w-full object-cover sm:h-[620px]" />
-        </div>
-        <div className="order-1 text-center lg:order-2 lg:text-left">
-          <h2 className="text-3xl font-bold sm:text-4xl">{t("drone.title")}</h2>
-          <p className="mt-4 text-muted-foreground">{t("drone.desc")}</p>
-          <div className="mt-6 grid grid-cols-3 gap-3 text-center">
-            <div className="rounded-xl border bg-card p-3"><div className="text-2xl font-extrabold text-primary">2 min</div><div className="text-xs text-muted-foreground">do terminala</div></div>
-            <div className="rounded-xl border bg-card p-3"><div className="text-2xl font-extrabold text-primary">24/7</div><div className="text-xs text-muted-foreground">nadzor</div></div>
-            <div className="rounded-xl border bg-card p-3"><div className="text-2xl font-extrabold text-primary">100%</div><div className="text-xs text-muted-foreground">sigurno</div></div>
-          </div>
-        </div>
-      </div>
+    <section className="bg-muted/40">
+      <img src={aerialMapImg} alt="Park&Fly — pogled iz vazduha s rutom do aerodroma Sarajevo" className="block w-full h-auto" />
     </section>
   );
 }
