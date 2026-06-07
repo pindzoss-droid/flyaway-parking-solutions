@@ -40,8 +40,8 @@ function Index() {
       <RentACarBanner />
       <Faq />
       <Location />
-      <VideoSection />
-      <Reviews />
+      {/* <VideoSection /> */}
+      {/* <Reviews /> */}
       <Footer />
       <ReservationModal open={open} onOpenChange={setOpen} />
     </div>
@@ -183,15 +183,15 @@ function Location() {
           <h2 className="text-3xl font-bold sm:text-4xl">{t("location.title")}</h2>
           <p className="mt-4 text-muted-foreground">{t("location.desc")}</p>
           <div className="mt-8 grid gap-3">
-            <ContactBox icon={MapPin} label="Adresa" value="Aerodromska bb, Sarajevo" />
-            <ContactBox icon={Phone} label="Telefon" value="+387 — — — —" />
+            <ContactBox icon={MapPin} label="Adresa" value="Kurta Schorka 24a, Sarajevo" />
+            <ContactBox icon={Phone} label="Telefon" value="060/351-3513" />
             <ContactBox icon={Mail} label="Email" value="info@parkandfly.ba" />
           </div>
         </div>
         <div className="aspect-video overflow-hidden rounded-2xl border bg-card shadow-card">
           <iframe
             title="Map"
-            src="https://www.google.com/maps?q=Sarajevo+Airport&output=embed"
+            src="https://www.google.com/maps?q=43.83096560702807,18.329951888090577&z=17&output=embed"
             className="h-full w-full"
             loading="lazy"
           />
@@ -278,13 +278,13 @@ function Footer() {
           <h3 className="text-3xl font-bold sm:text-4xl">{t("footer.tagline")}</h3>
           <p className="mt-2 text-navy-foreground/70">Rezerviši online — sigurno mjesto za tvoj auto dok ti letiš.</p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
-            <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-md bg-[#25D366] px-4 py-2 text-sm font-semibold text-white">
+            <a href="https://wa.me/387603513513" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-md bg-[#25D366] px-4 py-2 text-sm font-semibold text-white">
               <WhatsAppIcon className="h-4 w-4" /> WhatsApp
             </a>
-            <a href="viber://chat?number=%2B387" className="inline-flex items-center gap-2 rounded-md bg-[#7360F2] px-4 py-2 text-sm font-semibold text-white">
+            <a href="viber://chat?number=%2B38760351351" className="inline-flex items-center gap-2 rounded-md bg-[#7360F2] px-4 py-2 text-sm font-semibold text-white">
               <ViberIcon className="h-4 w-4" /> Viber
             </a>
-            <a href="tel:+387" className="inline-flex items-center gap-2 rounded-md border border-white/20 px-4 py-2 text-sm font-semibold text-navy-foreground hover:bg-white/10">
+            <a href="tel:+38760351351" className="inline-flex items-center gap-2 rounded-md border border-white/20 px-4 py-2 text-sm font-semibold text-navy-foreground hover:bg-white/10">
               <Phone className="h-4 w-4" /> Pozovi
             </a>
           </div>
@@ -329,13 +329,13 @@ function Footer() {
           <div>
             <h4 className="text-sm font-semibold uppercase tracking-wider text-navy-foreground/60">Kontakt</h4>
             <ul className="mt-4 space-y-2 text-sm">
-              <li className="flex items-center gap-2"><MapPin className="h-4 w-4 text-primary" /> Aerodromska bb, Sarajevo</li>
-              <li className="flex items-center gap-2"><Phone className="h-4 w-4 text-primary" /> +387 — — — —</li>
+              <li className="flex items-center gap-2"><MapPin className="h-4 w-4 text-primary" /> Kurta Schorka 24a, Sarajevo</li>
+              <li className="flex items-center gap-2"><Phone className="h-4 w-4 text-primary" /> 060/351-3513</li>
               <li className="flex items-center gap-2"><Mail className="h-4 w-4 text-primary" /> info@parkandfly.ba</li>
             </ul>
             <div className="mt-4 flex gap-2">
-              <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#25D366] text-white"><WhatsAppIcon className="h-4 w-4" /></a>
-              <a href="viber://chat?number=%2B387" aria-label="Viber" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#7360F2] text-white"><ViberIcon className="h-4 w-4" /></a>
+              <a href="https://wa.me/387603513513" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#25D366] text-white"><WhatsAppIcon className="h-4 w-4" /></a>
+              <a href="viber://chat?number=%2B38760351351" aria-label="Viber" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#7360F2] text-white"><ViberIcon className="h-4 w-4" /></a>
             </div>
           </div>
         </div>
