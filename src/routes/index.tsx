@@ -10,8 +10,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { useI18n } from "@/lib/i18n";
 import droneAsset from "@/assets/drone-aerial.png.asset.json";
 import rentcarBgAsset from "@/assets/rentcar-bg.png.asset.json";
+import aerialMapAsset from "@/assets/aerial-map.png.asset.json";
 
 const droneImg = droneAsset.url;
+const aerialMapImg = aerialMapAsset.url;
 const rentcarBg = rentcarBgAsset.url;
 
 export const Route = createFileRoute("/")({
