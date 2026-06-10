@@ -137,14 +137,17 @@ function RentACarBanner() {
           <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center gap-5">
             <h3 className="text-3xl font-bold sm:text-4xl">Rent a Car i usluge prevoza</h3>
             <p className="max-w-xl text-white/85">Rezerviši vozilo ili transfer u 2 jednostavna koraka</p>
-            <Button
-              className="h-12 px-8 text-base font-semibold text-white shadow-cta"
+            <a
+              href="https://sarajevovip.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-12 items-center justify-center rounded-md px-8 text-base font-semibold text-white shadow-cta"
               style={{ backgroundColor: "#BFA37C" }}
               onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#AC8E68")}
               onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#BFA37C")}
             >
               Saznaj više
-            </Button>
+            </a>
           </div>
         </div>
       </div>
@@ -269,7 +272,7 @@ function Footer() {
     { icon: ShieldCheck, label: "24/7 nadzor" },
     { icon: Clock, label: "Otvoreno 0–24h" },
     { icon: CreditCard, label: "Kartice & gotovina" },
-    { icon: Plane, label: "2 min do aerodroma" },
+    { icon: Plane, label: "1 min do aerodroma" },
   ];
   return (
     <footer id="contact" className="relative overflow-hidden bg-navy text-navy-foreground">
@@ -306,12 +309,8 @@ function Footer() {
         {/* Columns */}
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
           <div>
-            <div className="flex items-center gap-1">
-              <span className="text-2xl font-bold">PARK</span>
-              <span className="text-2xl font-bold text-primary">&</span>
-              <span className="text-2xl font-bold">FLY</span>
-            </div>
-            <p className="mt-3 text-sm text-navy-foreground/70">Privatni parking 2 min od aerodroma Sarajevo. Sigurno, brzo, povoljno.</p>
+            <img src={logoAsset.url} alt="PARK & FLY" className="h-8 w-auto max-w-[150px] object-contain" />
+            <p className="mt-3 text-sm text-navy-foreground/70">Privatni parking 1 min od aerodroma Sarajevo. Sigurno, brzo, povoljno.</p>
             <h4 className="mt-6 text-sm font-semibold uppercase tracking-wider text-navy-foreground/60">Radno vrijeme</h4>
             <ul className="mt-3 space-y-2 text-sm text-navy-foreground/80">
               <li className="flex justify-between"><span>Pon – Ned</span><span>0 – 24h</span></li>
