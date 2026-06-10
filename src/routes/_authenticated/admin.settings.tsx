@@ -117,7 +117,7 @@ function SettingsPage() {
       <Card className="lg:col-span-2">
         <CardHeader>
           <CardTitle>Cjenovnik (3 paketa)</CardTitle>
-          <CardDescription>Postavi raspon dana i cijenu po danu za svaki paket. Sve cijene su u BAM.</CardDescription>
+          <CardDescription>Postavi raspon dana i cijenu po danu za svaki paket. Sve cijene su u KM.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-4 md:grid-cols-3">
@@ -255,7 +255,7 @@ function TierEditor({
         </div>
       </div>
       <div className="space-y-1.5">
-        <Label className="text-xs">Cijena po danu (BAM)</Label>
+        <Label className="text-xs">Cijena po danu (KM)</Label>
         <Stepper value={price} min={0} step={1} onChange={onPriceChange} />
       </div>
     </div>
