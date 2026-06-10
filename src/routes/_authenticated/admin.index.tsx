@@ -21,7 +21,7 @@ function AdminHome() {
     return <div className="flex h-60 items-center justify-center"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>;
   }
 
-  const currency = settings.currency;
+  const currency = "KM";
   const occupancyPct = settings.total_spots > 0 ? Math.round((stats.currentlyOccupied / settings.total_spots) * 100) : 0;
 
   return (
