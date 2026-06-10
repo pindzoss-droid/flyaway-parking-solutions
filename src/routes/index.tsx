@@ -11,8 +11,10 @@ import { useI18n } from "@/lib/i18n";
 import droneAsset from "@/assets/drone-aerial.png.asset.json";
 import rentcarBgAsset from "@/assets/rentcar-bg.png.asset.json";
 import aerialMapAsset from "@/assets/aerial-map.png.asset.json";
+import heroBgAsset from "@/assets/hero-airport.png.asset.json";
 
 const droneImg = droneAsset.url;
+const heroBg = heroBgAsset.url;
 const aerialMapImg = aerialMapAsset.url;
 const rentcarBg = rentcarBgAsset.url;
 
@@ -53,7 +55,7 @@ function Hero({ onBook }: { onBook: () => void }) {
   return (
     <section
       className="relative isolate -mt-16 overflow-hidden pt-16"
-      style={{ backgroundImage: `linear-gradient(135deg, oklch(0.18 0.04 252 / 0.88), oklch(0.22 0.07 240 / 0.78)), url(${droneImg})`, backgroundSize: "cover", backgroundPosition: "center" }}
+      style={{ backgroundImage: `linear-gradient(135deg, oklch(0.18 0.04 252 / 0.92), oklch(0.22 0.07 240 / 0.85)), url(${heroBg})`, backgroundSize: "cover", backgroundPosition: "center" }}
     >
       <div className="container-park flex min-h-[88vh] flex-col items-center justify-center py-24 text-center text-navy-foreground">
         <span className="mb-8 inline-flex items-center rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs font-medium tracking-wide text-navy-foreground/90">
