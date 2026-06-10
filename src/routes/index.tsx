@@ -315,16 +315,16 @@ function Footer() {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
           <div>
             <img src={logoAsset.url} alt="PARK & FLY" className="h-8 w-auto max-w-[150px] object-contain" />
-            <p className="mt-3 text-sm text-navy-foreground/70">Privatni parking 1 min od aerodroma Sarajevo. Sigurno, brzo, povoljno.</p>
-            <h4 className="mt-6 text-sm font-semibold uppercase tracking-wider text-navy-foreground/60">Radno vrijeme</h4>
+            <p className="mt-3 text-sm text-navy-foreground/70">{t("footer.about")}</p>
+            <h4 className="mt-6 text-sm font-semibold uppercase tracking-wider text-navy-foreground/60">{t("footer.hours")}</h4>
             <ul className="mt-3 space-y-2 text-sm text-navy-foreground/80">
-              <li className="flex justify-between"><span>Pon – Ned</span><span>0 – 24h</span></li>
-              <li className="flex justify-between"><span>Praznici</span><span>Otvoreno</span></li>
+              <li className="flex justify-between"><span>{t("footer.daysRange")}</span><span>{t("footer.openAll")}</span></li>
+              <li className="flex justify-between"><span>{t("footer.holidays")}</span><span>{t("footer.open")}</span></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-navy-foreground/60">Linkovi</h4>
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-navy-foreground/60">{t("footer.links")}</h4>
             <ul className="mt-4 space-y-2 text-sm">
               <li><a href="#why" className="text-navy-foreground/80 hover:text-primary">{t("nav.why")}</a></li>
               <li><a href="#location" className="text-navy-foreground/80 hover:text-primary">{t("nav.location")}</a></li>
@@ -334,7 +334,8 @@ function Footer() {
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-navy-foreground/60">Kontakt</h4>
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-navy-foreground/60">{t("footer.contact")}</h4>
+
             <ul className="mt-4 space-y-2 text-sm">
               <li className="flex items-center gap-2"><MapPin className="h-4 w-4 text-primary" /> Kurta Schorka 24a, Sarajevo</li>
               <li className="flex items-center gap-2"><Phone className="h-4 w-4 text-primary" /> 060/351-3513</li>
