@@ -2,47 +2,17 @@ import { useQuery } from "@tanstack/react-query";
 import { Check, ArrowRight, Plane, ShieldCheck, Eye, Fence, BadgePercent, Sparkles } from "lucide-react";
 import { getPricingTiers, type PricingTier } from "@/lib/reservations";
 import { Button } from "@/components/ui/button";
+import { useI18n } from "@/lib/i18n";
 
 type Props = { onBook: () => void };
-
-const COPY: Record<number, { eyebrow: string; title: string; tagline: string; popular?: boolean }> = {
-  1: {
-    eyebrow: "Kratki boravak",
-    title: "Brzi odlazak",
-    tagline: "Savršeno za vikend putovanja i poslovne skokove — ostavi auto i kreni bez razmišljanja.",
-  },
-  2: {
-    eyebrow: "Najbolji izbor",
-    title: "Odmor bez brige",
-    tagline: "Idealan balans cijene i mira — pokrije godišnji odmor uz uštedu na svaki dan.",
-    popular: true,
-  },
-  3: {
-    eyebrow: "Dugi put",
-    title: "Maraton paket",
-    tagline: "Za one koji putuju dugo — najniža dnevna tarifa i potpuna sigurnost vašeg vozila.",
-  },
-};
-
-function rangeLabel(t1To: number, t2To: number, idx: number): string {
-  if (idx === 1) return `1 – ${t1To} dana`;
-  if (idx === 2) return `${t1To + 1} – ${t2To} dana`;
-  return `${t2To + 1}+ dana`;
-}
 
 function savingsPct(price: number, base: number): number {
   if (!base || price >= base) return 0;
   return Math.round(((base - price) / base) * 100);
 }
 
-const FEATURES = [
-  { icon: Plane, label: "Besplatan transfer do aerodroma" },
-  { icon: Eye, label: "Video nadzor 24/7" },
-  { icon: ShieldCheck, label: "Fizički nadzor" },
-  { icon: Fence, label: "Ograđen i osvijetljen prostor" },
-];
-
 export function PricingPackages({ onBook }: Props) {
+  const { t } = useI18n();
   const { data: tiers } = useQuery({ queryKey: ["pricing-tiers-public"], queryFn: getPricingTiers });
 
   const safeTiers: PricingTier[] = tiers ?? [
@@ -51,27 +21,44 @@ export function PricingPackages({ onBook }: Props) {
     { tier_index: 3, day_to: null, price_per_day: 6 },
   ];
 
-  const t1To = safeTiers.find((t) => t.tier_index === 1)?.day_to ?? 10;
-  const t2To = safeTiers.find((t) => t.tier_index === 2)?.day_to ?? 20;
-  const basePrice = Number(safeTiers.find((t) => t.tier_index === 1)?.price_per_day ?? 10);
+  const t1To = safeTiers.find((x) => x.tier_index === 1)?.day_to ?? 10;
+  const t2To = safeTiers.find((x) => x.tier_index === 2)?.day_to ?? 20;
+  const basePrice = Number(safeTiers.find((x) => x.tier_index === 1)?.price_per_day ?? 10);
+
+  const COPY: Record<number, { eyebrow: string; title: string; tagline: string; popular?: boolean }> = {
+    1: { eyebrow: t("pricing.p1.eyebrow"), title: t("pricing.p1.title"), tagline: t("pricing.p1.tagline") },
+    2: { eyebrow: t("pricing.p2.eyebrow"), title: t("pricing.p2.title"), tagline: t("pricing.p2.tagline"), popular: true },
+    3: { eyebrow: t("pricing.p3.eyebrow"), title: t("pricing.p3.title"), tagline: t("pricing.p3.tagline") },
+  };
+
+  const FEATURES = [
+    { icon: Plane, label: t("pricing.f1") },
+    { icon: Eye, label: t("pricing.f2") },
+    { icon: ShieldCheck, label: t("pricing.f3") },
+    { icon: Fence, label: t("pricing.f4") },
+  ];
+
+  const rangeLabel = (idx: number): string => {
+    if (idx === 1) return t("pricing.daysRange1").replace("{to}", String(t1To));
+    if (idx === 2) return t("pricing.daysRange2").replace("{from}", String(t1To + 1)).replace("{to}", String(t2To));
+    return t("pricing.daysRange3").replace("{from}", String(t2To + 1));
+  };
 
   return (
     <section id="cjenovnik" className="bg-muted/40 py-24">
       <div className="container-park">
         <div className="mx-auto mb-14 max-w-2xl text-center">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary">
-            <Sparkles className="h-3.5 w-3.5" /> Cjenovnik
+            <Sparkles className="h-3.5 w-3.5" /> {t("pricing.eyebrow")}
           </div>
-          <h2 className="text-3xl font-bold sm:text-5xl">Tri paketa, jedna sigurnost</h2>
-          <p className="mt-4 text-muted-foreground">
-            Što duže ostavite auto kod nas — to je dnevna tarifa povoljnija. Bez skrivenih troškova, sa transferom u cijeni.
-          </p>
+          <h2 className="text-3xl font-bold sm:text-5xl">{t("pricing.title")}</h2>
+          <p className="mt-4 text-muted-foreground">{t("pricing.subtitle")}</p>
         </div>
 
         <div className="grid items-stretch gap-6 md:grid-cols-3">
           {safeTiers.map((tier) => {
             const copy = COPY[tier.tier_index];
-            const range = rangeLabel(t1To, t2To, tier.tier_index);
+            const range = rangeLabel(tier.tier_index);
             const price = Number(tier.price_per_day);
             const pct = savingsPct(price, basePrice);
             const isPopular = !!copy.popular;
@@ -86,7 +73,7 @@ export function PricingPackages({ onBook }: Props) {
               >
                 {isPopular && (
                   <div className="absolute right-4 top-4 rounded-full bg-primary px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-primary-foreground shadow">
-                    Najpopularnije
+                    {t("pricing.popular")}
                   </div>
                 )}
 
@@ -103,7 +90,7 @@ export function PricingPackages({ onBook }: Props) {
                     <span className="text-5xl font-extrabold leading-none tracking-tight">{price.toFixed(0)}</span>
                     <span className="pb-1 text-lg font-semibold">KM</span>
                     <span className={"pb-1.5 ml-1 text-xs " + (isPopular ? "text-primary-foreground/80" : "text-muted-foreground")}>
-                      / dan
+                      {t("pricing.perDay")}
                     </span>
                   </div>
 
@@ -111,7 +98,7 @@ export function PricingPackages({ onBook }: Props) {
                     <div className={"mt-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold " +
                       (isPopular ? "bg-primary-foreground/15 text-primary-foreground" : "bg-success/15 text-success")
                     }>
-                      <BadgePercent className="h-3.5 w-3.5" /> Ušteda {pct}%
+                      <BadgePercent className="h-3.5 w-3.5" /> {t("pricing.savings")} {pct}%
                     </div>
                   )}
                 </div>
@@ -140,7 +127,7 @@ export function PricingPackages({ onBook }: Props) {
                         : "border-2 border-primary bg-transparent text-primary hover:bg-primary hover:text-primary-foreground")
                     }
                   >
-                    REZERVIŠI <ArrowRight className="ml-2 h-4 w-4" />
+                    {t("pricing.book")} <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </div>
               </div>
