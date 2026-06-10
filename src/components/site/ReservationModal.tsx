@@ -148,14 +148,15 @@ export function ReservationModal({ open, onOpenChange }: Props) {
                     <span className="text-lg font-bold text-primary">{quote.total} BAM</span>
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    Tarifa: <span className="font-medium text-foreground">{quote.rate} BAM/dan</span>
+                    {t("form.rate")}: <span className="font-medium text-foreground">{quote.rate} {t("form.perDay")}</span>
                   </div>
                   {quote.saved > 0 && (
                     <div className="flex items-center gap-2 rounded-md bg-success/10 px-2 py-1.5 text-xs font-medium text-success">
                       <Sparkles className="h-3.5 w-3.5" />
-                      Štedite {quote.saved} BAM zahvaljujući popustu za duži boravak!
+                      {t("form.savings").replace("{x}", String(quote.saved))}
                     </div>
                   )}
+
                 </div>
               )}
             </div>

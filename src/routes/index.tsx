@@ -122,6 +122,7 @@ function DroneShowcase() {
 }
 
 function RentACarBanner() {
+  const { t } = useI18n();
   return (
     <section className="py-16">
       <div className="container-park">
@@ -135,8 +136,8 @@ function RentACarBanner() {
           }}
         >
           <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center gap-5">
-            <h3 className="text-3xl font-bold sm:text-4xl">Rent a Car i usluge prevoza</h3>
-            <p className="max-w-xl text-white/85">Rezerviši vozilo ili transfer u 2 jednostavna koraka</p>
+            <h3 className="text-3xl font-bold sm:text-4xl">{t("rentcar.bannerTitle")}</h3>
+            <p className="max-w-xl text-white/85">{t("rentcar.bannerDesc")}</p>
             <a
               href="https://sarajevovip.com/"
               target="_blank"
@@ -146,7 +147,7 @@ function RentACarBanner() {
               onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#AC8E68")}
               onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#BFA37C")}
             >
-              Saznaj više
+              {t("rentcar.cta")}
             </a>
           </div>
         </div>
@@ -154,6 +155,7 @@ function RentACarBanner() {
     </section>
   );
 }
+
 
 function Faq() {
   const { t } = useI18n();
@@ -189,9 +191,10 @@ function Location() {
           <h2 className="text-3xl font-bold sm:text-4xl">{t("location.title")}</h2>
           <p className="mt-4 text-muted-foreground">{t("location.desc")}</p>
           <div className="mt-8 grid gap-3">
-            <ContactBox icon={MapPin} label="Adresa" value="Kurta Schorka 24a, Sarajevo" />
-            <ContactBox icon={Phone} label="Telefon" value="060/351-3513" />
+            <ContactBox icon={MapPin} label={t("location.address")} value="Kurta Schorka 24a, Sarajevo" />
+            <ContactBox icon={Phone} label={t("location.phone")} value="060/351-3513" />
             <ContactBox icon={Mail} label="Email" value="info@parkandfly.ba" />
+
           </div>
         </div>
         <div className="aspect-video overflow-hidden rounded-2xl border bg-card shadow-card">
@@ -269,11 +272,12 @@ function ViberIcon({ className }: { className?: string }) {
 function Footer() {
   const { t } = useI18n();
   const trust = [
-    { icon: ShieldCheck, label: "24/7 nadzor" },
-    { icon: Clock, label: "Otvoreno 0–24h" },
-    { icon: CreditCard, label: "Kartice & gotovina" },
-    { icon: Plane, label: "1 min do aerodroma" },
+    { icon: ShieldCheck, label: t("footer.trust1") },
+    { icon: Clock, label: t("footer.trust2") },
+    { icon: CreditCard, label: t("footer.trust3") },
+    { icon: Plane, label: t("footer.trust4") },
   ];
+
   return (
     <footer id="contact" className="relative overflow-hidden bg-navy text-navy-foreground">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
@@ -282,7 +286,7 @@ function Footer() {
         {/* CTA strip — full width */}
         <div className="mb-14 rounded-2xl border border-white/10 bg-white/[0.03] p-8 text-center shadow-hero">
           <h3 className="text-3xl font-bold sm:text-4xl">{t("footer.tagline")}</h3>
-          <p className="mt-2 text-navy-foreground/70">Rezerviši online — sigurno mjesto za tvoj auto dok ti letiš.</p>
+          <p className="mt-2 text-navy-foreground/70">{t("footer.ctaDesc")}</p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             <a href="https://wa.me/387603513513" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-md bg-[#25D366] px-4 py-2 text-sm font-semibold text-white">
               <WhatsAppIcon className="h-4 w-4" /> WhatsApp
@@ -291,8 +295,9 @@ function Footer() {
               <ViberIcon className="h-4 w-4" /> Viber
             </a>
             <a href="tel:+38760351351" className="inline-flex items-center gap-2 rounded-md border border-white/20 px-4 py-2 text-sm font-semibold text-navy-foreground hover:bg-white/10">
-              <Phone className="h-4 w-4" /> Pozovi
+              <Phone className="h-4 w-4" /> {t("footer.call")}
             </a>
+
           </div>
         </div>
 
@@ -310,16 +315,16 @@ function Footer() {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
           <div>
             <img src={logoAsset.url} alt="PARK & FLY" className="h-8 w-auto max-w-[150px] object-contain" />
-            <p className="mt-3 text-sm text-navy-foreground/70">Privatni parking 1 min od aerodroma Sarajevo. Sigurno, brzo, povoljno.</p>
-            <h4 className="mt-6 text-sm font-semibold uppercase tracking-wider text-navy-foreground/60">Radno vrijeme</h4>
+            <p className="mt-3 text-sm text-navy-foreground/70">{t("footer.about")}</p>
+            <h4 className="mt-6 text-sm font-semibold uppercase tracking-wider text-navy-foreground/60">{t("footer.hours")}</h4>
             <ul className="mt-3 space-y-2 text-sm text-navy-foreground/80">
-              <li className="flex justify-between"><span>Pon – Ned</span><span>0 – 24h</span></li>
-              <li className="flex justify-between"><span>Praznici</span><span>Otvoreno</span></li>
+              <li className="flex justify-between"><span>{t("footer.daysRange")}</span><span>{t("footer.openAll")}</span></li>
+              <li className="flex justify-between"><span>{t("footer.holidays")}</span><span>{t("footer.open")}</span></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-navy-foreground/60">Linkovi</h4>
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-navy-foreground/60">{t("footer.links")}</h4>
             <ul className="mt-4 space-y-2 text-sm">
               <li><a href="#why" className="text-navy-foreground/80 hover:text-primary">{t("nav.why")}</a></li>
               <li><a href="#location" className="text-navy-foreground/80 hover:text-primary">{t("nav.location")}</a></li>
@@ -329,7 +334,8 @@ function Footer() {
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-navy-foreground/60">Kontakt</h4>
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-navy-foreground/60">{t("footer.contact")}</h4>
+
             <ul className="mt-4 space-y-2 text-sm">
               <li className="flex items-center gap-2"><MapPin className="h-4 w-4 text-primary" /> Kurta Schorka 24a, Sarajevo</li>
               <li className="flex items-center gap-2"><Phone className="h-4 w-4 text-primary" /> 060/351-3513</li>

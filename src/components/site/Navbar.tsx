@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
-import { Button } from "@/components/ui/button";
+
 import logoAsset from "@/assets/logo.png.asset.json";
 
 function WhatsAppIcon({ className }: { className?: string }) {
@@ -89,9 +89,8 @@ export function Navbar({ onBook }: { onBook: () => void }) {
               </button>
             ))}
           </div>
-          <Button onClick={onBook} size="sm" className="bg-primary text-primary-foreground hover:bg-primary-hover shadow-cta">
-            {t("nav.book")}
-          </Button>
+
+
         </div>
 
         <button onClick={() => setOpen(!open)} className="rounded-md p-2 text-navy-foreground lg:hidden" aria-label="Menu">
@@ -114,9 +113,8 @@ export function Navbar({ onBook }: { onBook: () => void }) {
                 <button key={l} onClick={() => setLang(l)} className={`rounded-full px-3 py-1 text-xs font-semibold uppercase ${lang === l ? "bg-primary text-primary-foreground" : "bg-white/10 text-navy-foreground/70"}`}>{l}</button>
               ))}
             </div>
-            <Button onClick={() => { setOpen(false); onBook(); }} className="bg-primary text-primary-foreground hover:bg-primary-hover">
-              {t("nav.book")}
-            </Button>
+
+
           </div>
         </div>
       )}
