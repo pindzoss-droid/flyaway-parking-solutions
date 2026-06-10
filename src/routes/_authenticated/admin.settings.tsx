@@ -255,7 +255,7 @@ function TierEditor({
         </div>
       </div>
       <div className="space-y-1.5">
-        <Label className="text-xs">Cijena po danu (BAM)</Label>
+        <Label className="text-xs">Cijena po danu (KM)</Label>
         <Stepper value={price} min={0} step={1} onChange={onPriceChange} />
       </div>
     </div>
