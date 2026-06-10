@@ -66,7 +66,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Park&Fly — privatni parking nadomak aerodroma Sarajevo" },
-      { name: "description", content: "Sigurno parkiranje 2 minute od aerodroma Sarajevo. 24/7 nadzor, besplatan transport i rent a car. Rezerviši online." },
+      { name: "description", content: "Sigurno parkiranje 1 minut od aerodroma Sarajevo. 24/7 nadzor, besplatan transport i rent a car. Rezerviši online." },
       { property: "og:title", content: "Park&Fly — privatni parking nadomak aerodroma Sarajevo" },
       { property: "og:description", content: "Parkiraj. Leti. Mirno." },
       { property: "og:type", content: "website" },
