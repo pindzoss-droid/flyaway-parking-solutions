@@ -23,7 +23,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Park&Fly — privatni parking nadomak aerodroma Sarajevo" },
-      { name: "description", content: "Sigurno parkiranje 2 minute od aerodroma Sarajevo. 24/7 nadzor, besplatan transport, rent a car. Rezerviši online." },
+      { name: "description", content: "Sigurno parkiranje 1 minut od aerodroma Sarajevo. 24/7 nadzor, besplatan transport, rent a car. Rezerviši online." },
       { property: "og:title", content: "Park&Fly — Sarajevo" },
       { property: "og:description", content: "Parkiraj. Leti. Mirno." },
     ],
@@ -194,7 +194,7 @@ function Location() {
         <div className="aspect-video overflow-hidden rounded-2xl border bg-card shadow-card">
           <iframe
             title="Map"
-            src="https://www.google.com/maps?q=43.83096560702807,18.329951888090577&z=17&output=embed"
+            src="https://www.google.com/maps?q=43.83115871760026,18.329866406039038&z=17&output=embed"
             className="h-full w-full"
             loading="lazy"
           />
