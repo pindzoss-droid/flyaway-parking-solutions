@@ -148,8 +148,8 @@ function RentACarBanner() {
               href="https://sarajevovip.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-12 items-center justify-center rounded-md px-8 text-base font-semibold text-white shadow-cta"
-              style={{ backgroundColor: "#BFA37C" }}
+              className="inline-flex h-12 items-center justify-center rounded-md px-8 text-base font-semibold text-white"
+              style={{ backgroundColor: "#BFA37C", boxShadow: "0 14px 30px -10px rgba(191, 163, 124, 0.5)" }}
               onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#AC8E68")}
               onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#BFA37C")}
             >
