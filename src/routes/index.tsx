@@ -91,7 +91,7 @@ function Why() {
     { icon: Car, t: t("why.rentcar.t"), d: t("why.rentcar.d") },
   ];
   return (
-    <section id="why" className="bg-background py-28">
+    <section id="why" className="bg-background pt-28 pb-14">
       <div className="container-park text-center">
         <div className="mx-auto mb-16 max-w-2xl">
           <h2 className="text-3xl font-bold sm:text-4xl">{t("why.title")}</h2>
@@ -115,7 +115,7 @@ function Why() {
 
 function DroneShowcase() {
   return (
-    <section className="py-16">
+    <section className="pt-8 pb-16">
       <div className="container-park">
         <img
           src={aerialMapImg}
