@@ -15,7 +15,7 @@ const dict = {
     "hero.desc":
       "Sigurno mjesto za vaše vozilo, samo 1 minut od aerodroma. 24/7 videonadzor, fizičko obezbjeđenje, besplatan transport do aerodroma i opcija rent a car kad god vam zatreba.",
     "hero.cta": "REZERVIŠI ONLINE",
-    "hero.badge": "2 min od aerodroma · 24/7 nadzor",
+    "hero.badge": "1 min od aerodroma · 24/7 nadzor",
     "why.title": "Zašto Park&Fly",
     "why.subtitle": "Sve što vam treba za miran odlazak na put.",
     "why.cctv.t": "Videonadzor 24/7",
