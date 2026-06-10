@@ -117,7 +117,7 @@ function SettingsPage() {
       <Card className="lg:col-span-2">
         <CardHeader>
           <CardTitle>Cjenovnik (3 paketa)</CardTitle>
-          <CardDescription>Postavi raspon dana i cijenu po danu za svaki paket. Sve cijene su u BAM.</CardDescription>
+          <CardDescription>Postavi raspon dana i cijenu po danu za svaki paket. Sve cijene su u KM.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-4 md:grid-cols-3">
