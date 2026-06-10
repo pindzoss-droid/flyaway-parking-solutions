@@ -272,11 +272,12 @@ function ViberIcon({ className }: { className?: string }) {
 function Footer() {
   const { t } = useI18n();
   const trust = [
-    { icon: ShieldCheck, label: "24/7 nadzor" },
-    { icon: Clock, label: "Otvoreno 0–24h" },
-    { icon: CreditCard, label: "Kartice & gotovina" },
-    { icon: Plane, label: "1 min do aerodroma" },
+    { icon: ShieldCheck, label: t("footer.trust1") },
+    { icon: Clock, label: t("footer.trust2") },
+    { icon: CreditCard, label: t("footer.trust3") },
+    { icon: Plane, label: t("footer.trust4") },
   ];
+
   return (
     <footer id="contact" className="relative overflow-hidden bg-navy text-navy-foreground">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
