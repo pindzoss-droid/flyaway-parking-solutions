@@ -327,9 +327,9 @@ function AddReservationDialog({ open, onOpenChange }: { open: boolean; onOpenCha
                 <div className="mt-2 space-y-1 border-t pt-2">
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground">Procjena cijene · {days} dana</span>
-                    <span className="text-lg font-bold text-primary">{quote.total} BAM</span>
+                    <span className="text-lg font-bold text-primary">{quote.total} KM</span>
                   </div>
-                  <div className="text-xs text-muted-foreground">Tarifa: {quote.rate} BAM/dan{quote.saved > 0 ? ` · Ušteda ${quote.saved} BAM` : ""}</div>
+                  <div className="text-xs text-muted-foreground">Tarifa: {quote.rate} KM/dan{quote.saved > 0 ? ` · Ušteda ${quote.saved} KM` : ""}</div>
                 </div>
               )}
             </div>
