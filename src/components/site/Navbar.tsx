@@ -89,9 +89,8 @@ export function Navbar({ onBook }: { onBook: () => void }) {
               </button>
             ))}
           </div>
-          <Button onClick={onBook} size="sm" className="bg-primary text-primary-foreground hover:bg-primary-hover shadow-cta">
-            {t("nav.book")}
-          </Button>
+
+
         </div>
 
         <button onClick={() => setOpen(!open)} className="rounded-md p-2 text-navy-foreground lg:hidden" aria-label="Menu">
