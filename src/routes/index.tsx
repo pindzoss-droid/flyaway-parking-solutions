@@ -286,7 +286,7 @@ function Footer() {
         {/* CTA strip — full width */}
         <div className="mb-14 rounded-2xl border border-white/10 bg-white/[0.03] p-8 text-center shadow-hero">
           <h3 className="text-3xl font-bold sm:text-4xl">{t("footer.tagline")}</h3>
-          <p className="mt-2 text-navy-foreground/70">Rezerviši online — sigurno mjesto za tvoj auto dok ti letiš.</p>
+          <p className="mt-2 text-navy-foreground/70">{t("footer.ctaDesc")}</p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             <a href="https://wa.me/387603513513" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-md bg-[#25D366] px-4 py-2 text-sm font-semibold text-white">
               <WhatsAppIcon className="h-4 w-4" /> WhatsApp
@@ -295,8 +295,9 @@ function Footer() {
               <ViberIcon className="h-4 w-4" /> Viber
             </a>
             <a href="tel:+38760351351" className="inline-flex items-center gap-2 rounded-md border border-white/20 px-4 py-2 text-sm font-semibold text-navy-foreground hover:bg-white/10">
-              <Phone className="h-4 w-4" /> Pozovi
+              <Phone className="h-4 w-4" /> {t("footer.call")}
             </a>
+
           </div>
         </div>
 
