@@ -191,9 +191,10 @@ function Location() {
           <h2 className="text-3xl font-bold sm:text-4xl">{t("location.title")}</h2>
           <p className="mt-4 text-muted-foreground">{t("location.desc")}</p>
           <div className="mt-8 grid gap-3">
-            <ContactBox icon={MapPin} label="Adresa" value="Kurta Schorka 24a, Sarajevo" />
-            <ContactBox icon={Phone} label="Telefon" value="060/351-3513" />
+            <ContactBox icon={MapPin} label={t("location.address")} value="Kurta Schorka 24a, Sarajevo" />
+            <ContactBox icon={Phone} label={t("location.phone")} value="060/351-3513" />
             <ContactBox icon={Mail} label="Email" value="info@parkandfly.ba" />
+
           </div>
         </div>
         <div className="aspect-video overflow-hidden rounded-2xl border bg-card shadow-card">
