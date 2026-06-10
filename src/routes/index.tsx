@@ -122,6 +122,7 @@ function DroneShowcase() {
 }
 
 function RentACarBanner() {
+  const { t } = useI18n();
   return (
     <section className="py-16">
       <div className="container-park">
@@ -135,8 +136,8 @@ function RentACarBanner() {
           }}
         >
           <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center gap-5">
-            <h3 className="text-3xl font-bold sm:text-4xl">Rent a Car i usluge prevoza</h3>
-            <p className="max-w-xl text-white/85">Rezerviši vozilo ili transfer u 2 jednostavna koraka</p>
+            <h3 className="text-3xl font-bold sm:text-4xl">{t("rentcar.bannerTitle")}</h3>
+            <p className="max-w-xl text-white/85">{t("rentcar.bannerDesc")}</p>
             <a
               href="https://sarajevovip.com/"
               target="_blank"
@@ -146,7 +147,7 @@ function RentACarBanner() {
               onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#AC8E68")}
               onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#BFA37C")}
             >
-              Saznaj više
+              {t("rentcar.cta")}
             </a>
           </div>
         </div>
@@ -154,6 +155,7 @@ function RentACarBanner() {
     </section>
   );
 }
+
 
 function Faq() {
   const { t } = useI18n();
