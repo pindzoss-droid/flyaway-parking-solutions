@@ -115,8 +115,14 @@ function Why() {
 
 function DroneShowcase() {
   return (
-    <section className="bg-muted/40">
-      <img src={aerialMapImg} alt="Park&Fly — pogled iz vazduha s rutom do aerodroma Sarajevo" className="block w-full h-auto" />
+    <section className="py-16">
+      <div className="container-park">
+        <img
+          src={aerialMapImg}
+          alt="Park&Fly — pogled iz vazduha s rutom do aerodroma Sarajevo"
+          className="block w-full h-auto rounded-2xl border shadow-card"
+        />
+      </div>
     </section>
   );
 }
