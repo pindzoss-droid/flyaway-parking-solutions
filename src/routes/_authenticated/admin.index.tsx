@@ -122,7 +122,7 @@ function AdminHome() {
         <div className="mb-4 flex items-center justify-between">
           <div>
             <h3 className="text-sm font-semibold">Prihodi po mjesecima</h3>
-            <p className="text-xs text-muted-foreground">Zadnjih 12 mjeseci (aktivne rezervacije)</p>
+            <p className="text-xs text-muted-foreground">Zadnjih 12 mjeseci (aktivne + završene rezervacije)</p>
           </div>
           <span className="text-xs text-muted-foreground">Ukupno: {stats.revenueTotal.toFixed(2)} {currency}</span>
         </div>
