@@ -261,10 +261,10 @@ function computeStats(reservations: Reservation[], totalSpots: number) {
     if (arr >= last30Start) last30Count++;
   }
 
-  // Daily series — last 30 days, active only
+  // Daily series — last 30 days (active + completed)
   const dailySeries = Array.from({ length: 30 }, (_, i) => {
     const day = startOfDay(subDays(now, 29 - i));
-    const count = reservations.filter((r) => r.status === "active" && isSameDay(new Date(r.arrival_at), day)).length;
+    const count = reservations.filter((r) => (r.status === "active" || r.status === "completed") && isSameDay(new Date(r.arrival_at), day)).length;
     return { label: format(day, "dd.MM"), count };
   });
 
