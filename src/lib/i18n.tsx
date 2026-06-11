@@ -196,7 +196,7 @@ const dict = {
     "form.available": "Slot available",
     "form.unavailable": "Slot unavailable — please pick another date",
     "form.blocked": "Parking is closed for the selected period",
-    "form.success": "Reservation sent! Confirmation is on its way to your email.",
+    "form.success": "Reservation confirmed!",
     "form.error": "Failed to submit the reservation.",
     "form.pickdates": "Pick dates",
     "form.days": "days",
