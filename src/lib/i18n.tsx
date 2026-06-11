@@ -73,7 +73,7 @@ const dict = {
     "form.available": "Termin je dostupan",
     "form.unavailable": "Termin nije dostupan — pokušajte drugi datum",
     "form.blocked": "Parking ne radi u odabranom periodu",
-    "form.success": "Rezervacija poslana! Potvrda stiže na email.",
+    "form.success": "Rezervacija je potvrđena!",
     "form.error": "Greška pri slanju rezervacije.",
     "form.pickdates": "Odaberite datume",
     "form.days": "dana",
