@@ -246,10 +246,12 @@ function computeStats(reservations: Reservation[], totalSpots: number) {
     const dep = new Date(r.departure_at);
     const price = Number(r.estimated_price) || 0;
 
-    if (r.status === "active") {
-      activeCount++;
+    if (r.status === "active" || r.status === "completed") {
       revenueTotal += price;
       if (arr >= monthStart) revenueThisMonth += price;
+    }
+    if (r.status === "active") {
+      activeCount++;
       if (arr <= now && now < dep) currentlyOccupied++;
       const in7 = new Date(now); in7.setDate(in7.getDate() + 7);
       if (arr > now && arr <= in7) upcoming.push(r);
