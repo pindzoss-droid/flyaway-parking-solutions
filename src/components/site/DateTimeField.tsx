@@ -18,6 +18,7 @@ export function DateTimeField({
   time,
   setTime,
   minDate,
+  allowPast,
 }: {
   dateLabel: string;
   timeLabel: string;
@@ -27,10 +28,13 @@ export function DateTimeField({
   time: string;
   setTime: (v: string) => void;
   minDate?: Date;
+  allowPast?: boolean;
 }) {
   const today = new Date(new Date().setHours(0, 0, 0, 0));
-  const floor = minDate && minDate > today ? new Date(new Date(minDate).setHours(0, 0, 0, 0)) : today;
-  const minStr = format(floor, "yyyy-MM-dd");
+  const floor = allowPast
+    ? (minDate ? new Date(new Date(minDate).setHours(0, 0, 0, 0)) : new Date(-8640000000000000))
+    : (minDate && minDate > today ? new Date(new Date(minDate).setHours(0, 0, 0, 0)) : today);
+  const minStr = allowPast && !minDate ? undefined : format(floor, "yyyy-MM-dd");
   const dateStr = date ? format(date, "yyyy-MM-dd") : "";
   const [hh = "08", mm = "00"] = time.split(":");
 
