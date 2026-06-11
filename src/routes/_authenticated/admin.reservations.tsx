@@ -297,8 +297,8 @@ function AddReservationDialog({ open, onOpenChange }: { open: boolean; onOpenCha
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <DateTimeField dateLabel="Datum dolaska" timeLabel="Vrijeme dolaska" required date={arrivalDate} setDate={(d) => { setArrivalDate(d); if (d && departureDate && departureDate < d) setDepartureDate(undefined); }} time={arrivalTime} setTime={setArrivalTime} />
-            <DateTimeField dateLabel="Datum odlaska" timeLabel="Vrijeme odlaska" required date={departureDate} setDate={setDepartureDate} time={departureTime} setTime={setDepartureTime} minDate={arrivalDate} />
+            <DateTimeField allowPast dateLabel="Datum dolaska" timeLabel="Vrijeme dolaska" required date={arrivalDate} setDate={(d) => { setArrivalDate(d); if (d && departureDate && departureDate < d) setDepartureDate(undefined); }} time={arrivalTime} setTime={setArrivalTime} />
+            <DateTimeField allowPast dateLabel="Datum odlaska" timeLabel="Vrijeme odlaska" required date={departureDate} setDate={setDepartureDate} time={departureTime} setTime={setDepartureTime} minDate={arrivalDate} />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
