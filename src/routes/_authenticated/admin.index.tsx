@@ -281,7 +281,7 @@ function computeStats(reservations: Reservation[], totalSpots: number) {
     let revenue = 0;
     let count = 0;
     for (const r of reservations) {
-      if (r.status !== "active") continue;
+      if (r.status !== "active" && r.status !== "completed") continue;
       const arr = new Date(r.arrival_at);
       if (arr >= monthDate && arr <= monthEnd) {
         revenue += Number(r.estimated_price) || 0;
