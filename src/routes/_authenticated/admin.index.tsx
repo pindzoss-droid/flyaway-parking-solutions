@@ -122,7 +122,7 @@ function AdminHome() {
         <div className="mb-4 flex items-center justify-between">
           <div>
             <h3 className="text-sm font-semibold">Prihodi po mjesecima</h3>
-            <p className="text-xs text-muted-foreground">Zadnjih 12 mjeseci (aktivne rezervacije)</p>
+            <p className="text-xs text-muted-foreground">Zadnjih 12 mjeseci (aktivne + završene rezervacije)</p>
           </div>
           <span className="text-xs text-muted-foreground">Ukupno: {stats.revenueTotal.toFixed(2)} {currency}</span>
         </div>
@@ -246,10 +246,12 @@ function computeStats(reservations: Reservation[], totalSpots: number) {
     const dep = new Date(r.departure_at);
     const price = Number(r.estimated_price) || 0;
 
-    if (r.status === "active") {
-      activeCount++;
+    if (r.status === "active" || r.status === "completed") {
       revenueTotal += price;
       if (arr >= monthStart) revenueThisMonth += price;
+    }
+    if (r.status === "active") {
+      activeCount++;
       if (arr <= now && now < dep) currentlyOccupied++;
       const in7 = new Date(now); in7.setDate(in7.getDate() + 7);
       if (arr > now && arr <= in7) upcoming.push(r);
@@ -279,7 +281,7 @@ function computeStats(reservations: Reservation[], totalSpots: number) {
     let revenue = 0;
     let count = 0;
     for (const r of reservations) {
-      if (r.status !== "active") continue;
+      if (r.status !== "active" && r.status !== "completed") continue;
       const arr = new Date(r.arrival_at);
       if (arr >= monthDate && arr <= monthEnd) {
         revenue += Number(r.estimated_price) || 0;
