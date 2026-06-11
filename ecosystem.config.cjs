@@ -7,6 +7,7 @@ module.exports = {
       exec_mode: "fork",
       instances: 1,
       // Node ulazi u produkcijski način — Supabase ključeve čita iz .env (učitano preko PM2 niže)
+      env_file: ".env",
       env: {
         NODE_ENV: "production",
         PORT: 3000,
