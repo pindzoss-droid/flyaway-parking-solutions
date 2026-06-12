@@ -118,19 +118,24 @@ export async function listReservations(): Promise<Reservation[]> {
 }
 
 export async function adminCreateReservation(input: NewReservationInput): Promise<void> {
-  const { error } = await supabase.from("reservations").insert({
-    full_name: input.full_name.trim(),
-    vehicle_plate: input.vehicle_plate.trim(),
-    contact_email: input.contact_email.trim(),
-    contact_phone: input.contact_phone.trim(),
-    arrival_at: input.arrival_at,
-    departure_at: input.departure_at,
-    destination: input.destination ?? null,
-    needs_airport_transfer: input.needs_airport_transfer,
-    note: input.note ?? null,
-    source: "admin",
-  });
+  const { data, error } = await supabase
+    .from("reservations")
+    .insert({
+      full_name: input.full_name.trim(),
+      vehicle_plate: input.vehicle_plate.trim(),
+      contact_email: input.contact_email.trim(),
+      contact_phone: input.contact_phone.trim(),
+      arrival_at: input.arrival_at,
+      departure_at: input.departure_at,
+      destination: input.destination ?? null,
+      needs_airport_transfer: input.needs_airport_transfer,
+      note: input.note ?? null,
+      source: "admin",
+    })
+    .select("estimated_price")
+    .single();
   if (error) throw new Error(error.message);
+  await fireReservationEmail(input, data?.estimated_price != null ? Number(data.estimated_price) : null);
 }
 
 export async function updateReservationStatus(id: number, status: Reservation["status"]): Promise<void> {
