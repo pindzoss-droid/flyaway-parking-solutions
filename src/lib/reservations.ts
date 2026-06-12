@@ -1,4 +1,26 @@
 import { supabase } from "@/integrations/supabase/client";
+import { sendReservationEmail } from "@/lib/emails/send-reservation-email.functions";
+
+async function fireReservationEmail(input: NewReservationInput, estimated_price: number | null) {
+  try {
+    await sendReservationEmail({
+      data: {
+        full_name: input.full_name.trim(),
+        vehicle_plate: input.vehicle_plate.trim().toUpperCase(),
+        contact_email: input.contact_email.trim(),
+        contact_phone: input.contact_phone.trim(),
+        arrival_at: input.arrival_at,
+        departure_at: input.departure_at,
+        destination: input.destination ?? null,
+        needs_airport_transfer: input.needs_airport_transfer,
+        note: input.note ?? null,
+        estimated_price,
+      },
+    });
+  } catch (err) {
+    console.error("[reservations] email dispatch failed:", err);
+  }
+}
 
 // ============ Public types ============
 export type Availability = { available_spots: number; total_spots: number; is_blocked: boolean };
@@ -57,19 +79,24 @@ export type NewReservationInput = {
 };
 
 export async function createReservation(input: NewReservationInput): Promise<void> {
-  const { error } = await supabase.from("reservations").insert({
-    full_name: input.full_name.trim(),
-    vehicle_plate: input.vehicle_plate.trim(),
-    contact_email: input.contact_email.trim(),
-    contact_phone: input.contact_phone.trim(),
-    arrival_at: input.arrival_at,
-    departure_at: input.departure_at,
-    destination: input.destination ?? null,
-    needs_airport_transfer: input.needs_airport_transfer,
-    note: input.note ?? null,
-    source: "online",
-  });
+  const { data, error } = await supabase
+    .from("reservations")
+    .insert({
+      full_name: input.full_name.trim(),
+      vehicle_plate: input.vehicle_plate.trim(),
+      contact_email: input.contact_email.trim(),
+      contact_phone: input.contact_phone.trim(),
+      arrival_at: input.arrival_at,
+      departure_at: input.departure_at,
+      destination: input.destination ?? null,
+      needs_airport_transfer: input.needs_airport_transfer,
+      note: input.note ?? null,
+      source: "online",
+    })
+    .select("estimated_price")
+    .single();
   if (error) throw new Error(error.message);
+  await fireReservationEmail(input, data?.estimated_price != null ? Number(data.estimated_price) : null);
 }
 
 // ============ Admin (RLS enforces admin role) ============
