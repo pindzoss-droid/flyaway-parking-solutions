@@ -297,10 +297,10 @@ function Footer() {
             <a href="https://wa.me/387603513513" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-md bg-[#25D366] px-4 py-2 text-sm font-semibold text-white">
               <WhatsAppIcon className="h-4 w-4" /> WhatsApp
             </a>
-            <a href="viber://chat?number=%2B38760351351" className="inline-flex items-center gap-2 rounded-md bg-[#7360F2] px-4 py-2 text-sm font-semibold text-white">
+            <a href="viber://chat?number=%2B387603513513" className="inline-flex items-center gap-2 rounded-md bg-[#7360F2] px-4 py-2 text-sm font-semibold text-white">
               <ViberIcon className="h-4 w-4" /> Viber
             </a>
-            <a href="tel:+38760351351" className="inline-flex items-center gap-2 rounded-md border border-white/20 px-4 py-2 text-sm font-semibold text-navy-foreground hover:bg-white/10">
+            <a href="tel:+387603513513" className="inline-flex items-center gap-2 rounded-md border border-white/20 px-4 py-2 text-sm font-semibold text-navy-foreground hover:bg-white/10">
               <Phone className="h-4 w-4" /> {t("footer.call")}
             </a>
 
@@ -349,7 +349,7 @@ function Footer() {
             </ul>
             <div className="mt-4 flex gap-2">
               <a href="https://wa.me/387603513513" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#25D366] text-white"><WhatsAppIcon className="h-4 w-4" /></a>
-              <a href="viber://chat?number=%2B38760351351" aria-label="Viber" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#7360F2] text-white"><ViberIcon className="h-4 w-4" /></a>
+              <a href="viber://chat?number=%2B387603513513" aria-label="Viber" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#7360F2] text-white"><ViberIcon className="h-4 w-4" /></a>
             </div>
           </div>
         </div>
