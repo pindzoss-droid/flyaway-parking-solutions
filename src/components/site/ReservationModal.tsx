@@ -12,6 +12,7 @@ import { checkAvailability, computeQuote, createReservation, getPricingTiers } f
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Sparkles } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
 
 type Props = { open: boolean; onOpenChange: (o: boolean) => void };
 
@@ -31,6 +32,7 @@ function diffDays(a: string | null, b: string | null) {
 
 export function ReservationModal({ open, onOpenChange }: Props) {
   const { t } = useI18n();
+  const navigate = useNavigate();
 
   const { data: tiers } = useQuery({ queryKey: ["pricing-tiers-public"], queryFn: getPricingTiers });
 
@@ -82,10 +84,10 @@ export function ReservationModal({ open, onOpenChange }: Props) {
         arrival_at: arrivalISO, departure_at: departureISO,
         destination: destination || null, needs_airport_transfer: transfer, note: note || null,
       });
-      toast.success(`${t("form.success")} (~${quote.total} BAM)`);
       onOpenChange(false);
       setFullName(""); setPlate(""); setEmail(""); setPhone(""); setDestination(""); setNote("");
       setArrivalDate(today); setDepartureDate(undefined);
+      navigate({ to: "/success" });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : t("form.error"));
     } finally { setSubmitting(false); }
