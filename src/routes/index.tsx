@@ -8,9 +8,7 @@ import { PricingPackages } from "@/components/site/PricingPackages";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useI18n } from "@/lib/i18n";
-import droneAsset from "@/assets/drone-aerial.png.asset.json";
-
-const droneImg = droneAsset.url;
+const droneImg = "/images/drone-aerial.png";
 const heroBg = "/images/hero-airport.png";
 const aerialMapImg = "/images/aerial-map.png";
 const rentcarBg = "/images/rentcar-bg.png";
