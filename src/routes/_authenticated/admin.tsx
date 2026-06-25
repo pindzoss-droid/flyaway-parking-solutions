@@ -4,7 +4,7 @@ import { SidebarProvider, Sidebar, SidebarContent, SidebarGroup, SidebarGroupCon
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import logoAsset from "@/assets/logo.png.asset.json";
+const logoAsset = { url: "/images/logo.png" };
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({ meta: [{ title: "Admin — Park&Fly" }, { name: "robots", content: "noindex" }] }),

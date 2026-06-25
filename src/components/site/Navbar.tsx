@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 
-import logoAsset from "@/assets/logo.png.asset.json";
+const logoAsset = { url: "/images/logo.png" };
 
 function WhatsAppIcon({ className }: { className?: string }) {
   return (

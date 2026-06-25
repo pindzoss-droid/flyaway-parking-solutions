@@ -9,15 +9,12 @@ import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useI18n } from "@/lib/i18n";
 import droneAsset from "@/assets/drone-aerial.png.asset.json";
-import rentcarBgAsset from "@/assets/rentcar-bg.png.asset.json";
-import aerialMapAsset from "@/assets/aerial-map.png.asset.json";
-import heroBgAsset from "@/assets/hero-airport.png.asset.json";
-import logoAsset from "@/assets/logo.png.asset.json";
 
 const droneImg = droneAsset.url;
-const heroBg = heroBgAsset.url;
-const aerialMapImg = aerialMapAsset.url;
-const rentcarBg = rentcarBgAsset.url;
+const heroBg = "/images/hero-airport.png";
+const aerialMapImg = "/images/aerial-map.png";
+const rentcarBg = "/images/rentcar-bg.png";
+const logoAsset = { url: "/images/logo.png" };
 
 export const Route = createFileRoute("/")({
   head: () => ({
