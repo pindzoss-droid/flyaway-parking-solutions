@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: "parkandfly",
-      script: "dist/server/index.mjs",
+      script: ".output/server/index.mjs",
       cwd: __dirname,
       exec_mode: "fork",
       instances: 1,
