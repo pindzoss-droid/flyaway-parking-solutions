@@ -254,6 +254,16 @@ const dict = {
     "pricing.f2": "24/7 video surveillance",
     "pricing.f3": "On-site security",
     "pricing.f4": "Fenced and lit area",
+    "cookies.title": "Your privacy",
+    "cookies.text": "We use cookies and Google Tag Manager for anonymous analytics and to improve your experience. You can accept all, allow only necessary, or adjust your preferences.",
+    "cookies.acceptAll": "Accept all",
+    "cookies.necessaryOnly": "Only necessary",
+    "cookies.settings": "Settings",
+    "cookies.necessary": "Necessary",
+    "cookies.necessaryDesc": "Required for the site to function. Always active.",
+    "cookies.analytics": "Analytics",
+    "cookies.analyticsDesc": "Google Tag Manager — anonymous usage statistics.",
+    "cookies.save": "Save choice",
   },
 
 } as const;
