@@ -28,12 +28,12 @@ declare global {
 function pushConsent(update: ConsentUpdate) {
   if (typeof window === "undefined") return;
   window.dataLayer = window.dataLayer || [];
-  // eslint-disable-next-line prefer-rest-params
-  window.dataLayer.push(["consent", "update", update]);
-  // Also push using gtag-style function arguments object for GTM compatibility
-  window.dataLayer.push(function (this: unknown) {
-    // no-op; ensures dataLayer flush
-  });
+  // Mirror gtag('consent','update',{...}) → dataLayer.push(arguments)
+  function gtag(..._args: unknown[]) {
+    // eslint-disable-next-line prefer-rest-params
+    window.dataLayer!.push(arguments);
+  }
+  gtag("consent", "update", update);
 }
 
 function applyConsent(analytics: boolean, ads: boolean) {
