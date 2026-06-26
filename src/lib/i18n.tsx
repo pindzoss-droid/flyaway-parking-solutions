@@ -125,6 +125,16 @@ const dict = {
     "pricing.f2": "Video nadzor 24/7",
     "pricing.f3": "Fizički nadzor",
     "pricing.f4": "Ograđen i osvijetljen prostor",
+    "cookies.title": "Vaša privatnost",
+    "cookies.text": "Koristimo kolačiće i Google Tag Manager za anonimnu analitiku i poboljšanje korisničkog iskustva. Možete prihvatiti sve, dopustiti samo neophodne ili podesiti svoje preferencije.",
+    "cookies.acceptAll": "Prihvati sve",
+    "cookies.necessaryOnly": "Samo neophodni",
+    "cookies.settings": "Postavke",
+    "cookies.necessary": "Neophodni",
+    "cookies.necessaryDesc": "Potrebni za rad sajta. Uvijek aktivni.",
+    "cookies.analytics": "Analitički",
+    "cookies.analyticsDesc": "Google Tag Manager — anonimna statistika korištenja.",
+    "cookies.save": "Sačuvaj izbor",
   },
 
   en: {
