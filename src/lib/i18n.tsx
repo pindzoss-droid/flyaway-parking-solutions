@@ -125,6 +125,16 @@ const dict = {
     "pricing.f2": "Video nadzor 24/7",
     "pricing.f3": "Fizički nadzor",
     "pricing.f4": "Ograđen i osvijetljen prostor",
+    "cookies.title": "Vaša privatnost",
+    "cookies.text": "Koristimo kolačiće i Google Tag Manager za anonimnu analitiku i poboljšanje korisničkog iskustva. Možete prihvatiti sve, dopustiti samo neophodne ili podesiti svoje preferencije.",
+    "cookies.acceptAll": "Prihvati sve",
+    "cookies.necessaryOnly": "Samo neophodni",
+    "cookies.settings": "Postavke",
+    "cookies.necessary": "Neophodni",
+    "cookies.necessaryDesc": "Potrebni za rad sajta. Uvijek aktivni.",
+    "cookies.analytics": "Analitički",
+    "cookies.analyticsDesc": "Google Tag Manager — anonimna statistika korištenja.",
+    "cookies.save": "Sačuvaj izbor",
   },
 
   en: {
@@ -244,6 +254,16 @@ const dict = {
     "pricing.f2": "24/7 video surveillance",
     "pricing.f3": "On-site security",
     "pricing.f4": "Fenced and lit area",
+    "cookies.title": "Your privacy",
+    "cookies.text": "We use cookies and Google Tag Manager for anonymous analytics and to improve your experience. You can accept all, allow only necessary, or adjust your preferences.",
+    "cookies.acceptAll": "Accept all",
+    "cookies.necessaryOnly": "Only necessary",
+    "cookies.settings": "Settings",
+    "cookies.necessary": "Necessary",
+    "cookies.necessaryDesc": "Required for the site to function. Always active.",
+    "cookies.analytics": "Analytics",
+    "cookies.analyticsDesc": "Google Tag Manager — anonymous usage statistics.",
+    "cookies.save": "Save choice",
   },
 
 } as const;
